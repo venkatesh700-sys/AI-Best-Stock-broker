@@ -3,5 +3,149 @@
   "swing_capital": 100000,
   "cash": 200000,
   "positions": [],
-  "history": []
+  "history": [],
+  "active_intraday_positions": [
+    {
+      "date": "2026-07-27",
+      "symbol": "ETERNAL.NS",
+      "qty": 67,
+      "entry_price": 295.85,
+      "target": 303.25,
+      "stop_loss": 292.89,
+      "allocated_capital": 19821.95,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "MAXHEALTH.NS",
+      "qty": 17,
+      "entry_price": 1114.6,
+      "target": 1142.46,
+      "stop_loss": 1103.45,
+      "allocated_capital": 18948.2,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "TRENT.NS",
+      "qty": 6,
+      "entry_price": 2938.3,
+      "target": 3011.76,
+      "stop_loss": 2908.92,
+      "allocated_capital": 17629.8,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "INDIGO.NS",
+      "qty": 3,
+      "entry_price": 5230.0,
+      "target": 5360.75,
+      "stop_loss": 5177.7,
+      "allocated_capital": 15690.0,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "ASIANPAINT.NS",
+      "qty": 7,
+      "entry_price": 2710.2,
+      "target": 2777.95,
+      "stop_loss": 2683.1,
+      "allocated_capital": 18971.4,
+      "status": "OPEN"
+    }
+  ],
+  "active_swing_positions": [
+    {
+      "date": "2026-07-27",
+      "symbol": "ETERNAL.NS",
+      "qty": 33,
+      "entry_price": 295.85,
+      "target": 303.25,
+      "stop_loss": 292.89,
+      "allocated_capital": 9763.05,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "MAXHEALTH.NS",
+      "qty": 8,
+      "entry_price": 1114.6,
+      "target": 1142.46,
+      "stop_loss": 1103.45,
+      "allocated_capital": 8916.8,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "TRENT.NS",
+      "qty": 3,
+      "entry_price": 2938.3,
+      "target": 3011.76,
+      "stop_loss": 2908.92,
+      "allocated_capital": 8814.9,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "INDIGO.NS",
+      "qty": 1,
+      "entry_price": 5230.0,
+      "target": 5360.75,
+      "stop_loss": 5177.7,
+      "allocated_capital": 5230.0,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "ASIANPAINT.NS",
+      "qty": 3,
+      "entry_price": 2710.2,
+      "target": 2777.95,
+      "stop_loss": 2683.1,
+      "allocated_capital": 8130.6,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "HCLTECH.NS",
+      "qty": 7,
+      "entry_price": 1295.9,
+      "target": 1328.3,
+      "stop_loss": 1282.94,
+      "allocated_capital": 9071.3,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "HINDUNILVR.NS",
+      "qty": 4,
+      "entry_price": 2174.6,
+      "target": 2228.96,
+      "stop_loss": 2152.85,
+      "allocated_capital": 8698.4,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "TITAN.NS",
+      "qty": 2,
+      "entry_price": 4740.1,
+      "target": 4858.6,
+      "stop_loss": 4692.7,
+      "allocated_capital": 9480.2,
+      "status": "OPEN"
+    },
+    {
+      "date": "2026-07-27",
+      "symbol": "WIPRO.NS",
+      "qty": 56,
+      "entry_price": 178.53,
+      "target": 182.99,
+      "stop_loss": 176.74,
+      "allocated_capital": 9997.68,
+      "status": "OPEN"
+    }
+  ]
 }
