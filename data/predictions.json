@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-07-27T16:46:53.279628Z",
+  "last_updated": "2026-07-27T17:34:47.523387Z",
   "mode": "intraday_search",
   "total_scanned": 50,
-  "total_signals": 15,
+  "total_signals": 27,
   "predictions": [
     {
       "symbol": "AXISBANK.NS",
@@ -12,9 +12,9 @@
       "target": 1284.31,
       "stop_loss": 1210.57,
       "risk_reward": 3.0,
-      "confidence": "70%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:47.109758Z"
+      "confidence": "67%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:41.409892Z"
     },
     {
       "symbol": "BAJFINANCE.NS",
@@ -24,9 +24,9 @@
       "target": 1095.58,
       "stop_loss": 1032.67,
       "risk_reward": 3.0,
-      "confidence": "70%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:47.402663Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:41.641135Z"
     },
     {
       "symbol": "BEL.NS",
@@ -36,9 +36,21 @@
       "target": 425.47,
       "stop_loss": 401.04,
       "risk_reward": 3.0,
-      "confidence": "69%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:47.664822Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:41.913621Z"
+    },
+    {
+      "symbol": "COALINDIA.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 427.5,
+      "target": 446.74,
+      "stop_loss": 421.09,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:42.316900Z"
     },
     {
       "symbol": "ETERNAL.NS",
@@ -48,9 +60,21 @@
       "target": 309.32,
       "stop_loss": 291.56,
       "risk_reward": 3.0,
-      "confidence": "69%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:48.534224Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:42.705525Z"
+    },
+    {
+      "symbol": "HCLTECH.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 1295.1,
+      "target": 1353.38,
+      "stop_loss": 1275.67,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:42.953864Z"
     },
     {
       "symbol": "HDFCLIFE.NS",
@@ -60,9 +84,9 @@
       "target": 577.73,
       "stop_loss": 544.56,
       "risk_reward": 3.0,
-      "confidence": "68%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:49.065997Z"
+      "confidence": "69%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:43.227143Z"
     },
     {
       "symbol": "ICICIBANK.NS",
@@ -73,8 +97,8 @@
       "stop_loss": 1424.01,
       "risk_reward": 3.0,
       "confidence": "70%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:49.488765Z"
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:43.665414Z"
     },
     {
       "symbol": "INDIGO.NS",
@@ -84,9 +108,33 @@
       "target": 5465.35,
       "stop_loss": 5151.55,
       "risk_reward": 3.0,
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:43.811377Z"
+    },
+    {
+      "symbol": "INFY.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 1079.2,
+      "target": 1127.76,
+      "stop_loss": 1063.01,
+      "risk_reward": 3.0,
       "confidence": "68%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:49.589513Z"
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:43.939829Z"
+    },
+    {
+      "symbol": "ITC.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 285.6,
+      "target": 298.45,
+      "stop_loss": 281.32,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.062066Z"
     },
     {
       "symbol": "JIOFIN.NS",
@@ -96,9 +144,33 @@
       "target": 246.87,
       "stop_loss": 232.7,
       "risk_reward": 3.0,
-      "confidence": "68%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:50.000404Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.165231Z"
+    },
+    {
+      "symbol": "KOTAKBANK.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 384.65,
+      "target": 401.96,
+      "stop_loss": 378.88,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.386343Z"
+    },
+    {
+      "symbol": "LT.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 3807.0,
+      "target": 3978.32,
+      "stop_loss": 3749.89,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.540021Z"
     },
     {
       "symbol": "M&M.NS",
@@ -108,9 +180,9 @@
       "target": 3386.32,
       "stop_loss": 3191.89,
       "risk_reward": 3.0,
-      "confidence": "71%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:50.495257Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.672455Z"
     },
     {
       "symbol": "MAXHEALTH.NS",
@@ -120,9 +192,9 @@
       "target": 1167.58,
       "stop_loss": 1100.54,
       "risk_reward": 3.0,
-      "confidence": "73%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:50.734893Z"
+      "confidence": "76%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:44.919086Z"
     },
     {
       "symbol": "NESTLEIND.NS",
@@ -132,9 +204,33 @@
       "target": 1511.17,
       "stop_loss": 1424.41,
       "risk_reward": 3.0,
-      "confidence": "68%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:50.850312Z"
+      "confidence": "67%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:45.046477Z"
+    },
+    {
+      "symbol": "NTPC.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 349.95,
+      "target": 365.7,
+      "stop_loss": 344.7,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:45.173797Z"
+    },
+    {
+      "symbol": "POWERGRID.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 288.85,
+      "target": 301.85,
+      "stop_loss": 284.52,
+      "risk_reward": 3.0,
+      "confidence": "67%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:45.418767Z"
     },
     {
       "symbol": "SHRIRAMFIN.NS",
@@ -144,9 +240,45 @@
       "target": 1084.92,
       "stop_loss": 1022.63,
       "risk_reward": 3.0,
-      "confidence": "72%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:51.654361Z"
+      "confidence": "74%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:45.841882Z"
+    },
+    {
+      "symbol": "SBIN.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 1020.0,
+      "target": 1065.9,
+      "stop_loss": 1004.7,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.239816Z"
+    },
+    {
+      "symbol": "SUNPHARMA.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 1973.0,
+      "target": 2061.78,
+      "stop_loss": 1943.4,
+      "risk_reward": 3.0,
+      "confidence": "67%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.351118Z"
+    },
+    {
+      "symbol": "TCS.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 2296.0,
+      "target": 2399.32,
+      "stop_loss": 2261.56,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.505982Z"
     },
     {
       "symbol": "TATACONSUM.NS",
@@ -156,9 +288,21 @@
       "target": 1157.23,
       "stop_loss": 1090.79,
       "risk_reward": 3.0,
-      "confidence": "68%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:52.273978Z"
+      "confidence": "73%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.628114Z"
+    },
+    {
+      "symbol": "TMPV.NS",
+      "signal": "BUY",
+      "mode": "intraday_search",
+      "entry_price": 327.4,
+      "target": 342.13,
+      "stop_loss": 322.49,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.761542Z"
     },
     {
       "symbol": "TATASTEEL.NS",
@@ -168,9 +312,9 @@
       "target": 192.78,
       "stop_loss": 181.71,
       "risk_reward": 3.0,
-      "confidence": "69%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:52.550029Z"
+      "confidence": "70%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:46.888358Z"
     },
     {
       "symbol": "WIPRO.NS",
@@ -181,8 +325,8 @@
       "stop_loss": 175.69,
       "risk_reward": 3.0,
       "confidence": "71%",
-      "pod_approval": "9/10 Pods Approved",
-      "timestamp": "2026-07-27T16:46:53.279614Z"
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-27T17:34:47.523345Z"
     }
   ]
 }
