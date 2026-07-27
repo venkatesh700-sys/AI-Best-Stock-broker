@@ -1,246 +1,188 @@
 {
-  "top_intraday": [
+  "last_updated": "2026-07-27T16:38:37.036540Z",
+  "mode": "swing_search",
+  "total_scanned": 50,
+  "total_signals": 15,
+  "predictions": [
+    {
+      "symbol": "AXISBANK.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1229.0,
+      "target": 1284.31,
+      "stop_loss": 1210.57,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:30.843102Z"
+    },
+    {
+      "symbol": "BAJFINANCE.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1048.4,
+      "target": 1095.58,
+      "stop_loss": 1032.67,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:31.104042Z"
+    },
+    {
+      "symbol": "BEL.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 407.15,
+      "target": 425.47,
+      "stop_loss": 401.04,
+      "risk_reward": 3.0,
+      "confidence": "69%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:31.375326Z"
+    },
     {
       "symbol": "ETERNAL.NS",
-      "entry_price": 295.85,
-      "target_price": 303.25,
-      "stop_loss": 292.89,
-      "confidence": 91.74,
-      "rvol": 2.93,
-      "debate": [
-        "[Technical Squad] Price action shows +5.59% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.93x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 61.5/100.",
-        "[Executive Council] Final consensus reached with confidence score: 91.74%."
-      ]
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 296.0,
+      "target": 309.32,
+      "stop_loss": 291.56,
+      "risk_reward": 3.0,
+      "confidence": "69%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:32.147289Z"
     },
     {
-      "symbol": "MAXHEALTH.NS",
-      "entry_price": 1114.6,
-      "target_price": 1142.46,
-      "stop_loss": 1103.45,
-      "confidence": 82.31,
-      "rvol": 4.2,
-      "debate": [
-        "[Technical Squad] Price action shows +3.22% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 4.20x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 53.3/100.",
-        "[Executive Council] Final consensus reached with confidence score: 82.31%."
-      ]
+      "symbol": "HDFCLIFE.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 552.85,
+      "target": 577.73,
+      "stop_loss": 544.56,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:32.738329Z"
     },
     {
-      "symbol": "TRENT.NS",
-      "entry_price": 2938.3,
-      "target_price": 3011.76,
-      "stop_loss": 2908.92,
-      "confidence": 80.3,
-      "rvol": 3.08,
-      "debate": [
-        "[Technical Squad] Price action shows +1.71% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.08x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 68.4/100.",
-        "[Executive Council] Final consensus reached with confidence score: 80.3%."
-      ]
+      "symbol": "ICICIBANK.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1445.7,
+      "target": 1510.76,
+      "stop_loss": 1424.01,
+      "risk_reward": 3.0,
+      "confidence": "70%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:33.156987Z"
     },
     {
       "symbol": "INDIGO.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
       "entry_price": 5230.0,
-      "target_price": 5360.75,
-      "stop_loss": 5177.7,
-      "confidence": 79.33,
-      "rvol": 2.22,
-      "debate": [
-        "[Technical Squad] Price action shows +4.91% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.22x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 41.5/100.",
-        "[Executive Council] Final consensus reached with confidence score: 79.33%."
-      ]
+      "target": 5465.35,
+      "stop_loss": 5151.55,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:33.300490Z"
     },
     {
-      "symbol": "ASIANPAINT.NS",
-      "entry_price": 2710.2,
-      "target_price": 2777.95,
-      "stop_loss": 2683.1,
-      "confidence": 79.21,
-      "rvol": 3.21,
-      "debate": [
-        "[Technical Squad] Price action shows +2.68% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.21x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 50.4/100.",
-        "[Executive Council] Final consensus reached with confidence score: 79.21%."
-      ]
-    }
-  ],
-  "top_swing": [
+      "symbol": "JIOFIN.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 236.24,
+      "target": 246.87,
+      "stop_loss": 232.7,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:33.703933Z"
+    },
     {
-      "symbol": "ETERNAL.NS",
-      "entry_price": 295.85,
-      "target_price": 303.25,
-      "stop_loss": 292.89,
-      "confidence": 91.74,
-      "rvol": 2.93,
-      "debate": [
-        "[Technical Squad] Price action shows +5.59% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.93x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 61.5/100.",
-        "[Executive Council] Final consensus reached with confidence score: 91.74%."
-      ]
+      "symbol": "M&M.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 3240.5,
+      "target": 3386.32,
+      "stop_loss": 3191.89,
+      "risk_reward": 3.0,
+      "confidence": "71%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:34.350899Z"
     },
     {
       "symbol": "MAXHEALTH.NS",
-      "entry_price": 1114.6,
-      "target_price": 1142.46,
-      "stop_loss": 1103.45,
-      "confidence": 82.31,
-      "rvol": 4.2,
-      "debate": [
-        "[Technical Squad] Price action shows +3.22% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 4.20x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 53.3/100.",
-        "[Executive Council] Final consensus reached with confidence score: 82.31%."
-      ]
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1117.3,
+      "target": 1167.58,
+      "stop_loss": 1100.54,
+      "risk_reward": 3.0,
+      "confidence": "73%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:34.566684Z"
     },
     {
-      "symbol": "TRENT.NS",
-      "entry_price": 2938.3,
-      "target_price": 3011.76,
-      "stop_loss": 2908.92,
-      "confidence": 80.3,
-      "rvol": 3.08,
-      "debate": [
-        "[Technical Squad] Price action shows +1.71% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.08x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 68.4/100.",
-        "[Executive Council] Final consensus reached with confidence score: 80.3%."
-      ]
+      "symbol": "NESTLEIND.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1446.1,
+      "target": 1511.17,
+      "stop_loss": 1424.41,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:34.694479Z"
     },
     {
-      "symbol": "INDIGO.NS",
-      "entry_price": 5230.0,
-      "target_price": 5360.75,
-      "stop_loss": 5177.7,
-      "confidence": 79.33,
-      "rvol": 2.22,
-      "debate": [
-        "[Technical Squad] Price action shows +4.91% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.22x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 41.5/100.",
-        "[Executive Council] Final consensus reached with confidence score: 79.33%."
-      ]
+      "symbol": "SHRIRAMFIN.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1038.2,
+      "target": 1084.92,
+      "stop_loss": 1022.63,
+      "risk_reward": 3.0,
+      "confidence": "72%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:35.428504Z"
     },
     {
-      "symbol": "ASIANPAINT.NS",
-      "entry_price": 2710.2,
-      "target_price": 2777.95,
-      "stop_loss": 2683.1,
-      "confidence": 79.21,
-      "rvol": 3.21,
-      "debate": [
-        "[Technical Squad] Price action shows +2.68% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.21x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 50.4/100.",
-        "[Executive Council] Final consensus reached with confidence score: 79.21%."
-      ]
+      "symbol": "TATACONSUM.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1107.4,
+      "target": 1157.23,
+      "stop_loss": 1090.79,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:35.973034Z"
     },
     {
-      "symbol": "MARUTI.NS",
-      "entry_price": 13730.0,
-      "target_price": 14073.25,
-      "stop_loss": 13592.7,
-      "confidence": 76.93,
-      "rvol": 4.23,
-      "debate": [
-        "[Technical Squad] Price action shows +2.09% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 4.23x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 50.0/100.",
-        "[Executive Council] Final consensus reached with confidence score: 76.93%."
-      ]
-    },
-    {
-      "symbol": "HCLTECH.NS",
-      "entry_price": 1295.9,
-      "target_price": 1328.3,
-      "stop_loss": 1282.94,
-      "confidence": 76.35,
-      "rvol": 2.84,
-      "debate": [
-        "[Technical Squad] Price action shows +2.19% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.84x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 50.2/100.",
-        "[Executive Council] Final consensus reached with confidence score: 76.35%."
-      ]
-    },
-    {
-      "symbol": "HINDUNILVR.NS",
-      "entry_price": 2174.6,
-      "target_price": 2228.96,
-      "stop_loss": 2152.85,
-      "confidence": 75.67,
-      "rvol": 2.9,
-      "debate": [
-        "[Technical Squad] Price action shows +1.31% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 2.90x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 52.8/100.",
-        "[Executive Council] Final consensus reached with confidence score: 75.67%."
-      ]
-    },
-    {
-      "symbol": "TITAN.NS",
-      "entry_price": 4740.1,
-      "target_price": 4858.6,
-      "stop_loss": 4692.7,
-      "confidence": 75.54,
-      "rvol": 3.22,
-      "debate": [
-        "[Technical Squad] Price action shows +1.07% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.22x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 71.9/100.",
-        "[Executive Council] Final consensus reached with confidence score: 75.54%."
-      ]
+      "symbol": "TATASTEEL.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 184.48,
+      "target": 192.78,
+      "stop_loss": 181.71,
+      "risk_reward": 3.0,
+      "confidence": "69%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:36.312706Z"
     },
     {
       "symbol": "WIPRO.NS",
-      "entry_price": 178.53,
-      "target_price": 182.99,
-      "stop_loss": 176.74,
-      "confidence": 74.49,
-      "rvol": 3.63,
-      "debate": [
-        "[Technical Squad] Price action shows +0.93% momentum. VWAP alignment confirmed.",
-        "[Volume Squad] RVOL is at 3.63x average volume threshold.",
-        "[Bullish Squad] Breakout pattern detected above resistance. Target upside strong.",
-        "[Bearish Squad] Downside risk identified if stop loss breaks near key support.",
-        "[News Squad] Macro sentiment score evaluated at 66.9/100.",
-        "[Executive Council] Final consensus reached with confidence score: 74.49%."
-      ]
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 178.37,
+      "target": 186.4,
+      "stop_loss": 175.69,
+      "risk_reward": 3.0,
+      "confidence": "71%",
+      "pod_approval": "9/10 Pods Approved",
+      "timestamp": "2026-07-27T16:38:37.036525Z"
     }
   ]
 }
