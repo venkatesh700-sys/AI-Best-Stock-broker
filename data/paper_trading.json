@@ -1,1 +1,7 @@
-{}
+{
+  "intraday_capital": 100000,
+  "swing_capital": 100000,
+  "cash": 200000,
+  "positions": [],
+  "history": []
+}
