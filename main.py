@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 from engine.fetch_data import fetch_stock_data, get_market_universe
-from paper_trading import execute_paper_trades, load_portfolio
+from engine.paper_trading import execute_paper_trades, load_portfolio
 
 def send_telegram_alert(mode, predictions, trades):
     """
