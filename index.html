@@ -1,204 +1,569 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Stock Trader - Swarm Terminal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Stock Trader | Swarm Analytics & Report Generator</title>
+  <!-- Tailwind CSS & Chart.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+            darkbg: '#0f172a',
+            cardbg: '#1e293b',
+            bordercolor: '#334155'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      body { background-color: white !important; color: black !important; }
+      header, button, .no-print { display: none !important; }
+      .bg-cardbg, .bg-slate-900\/60 { background-color: white !important; border: 1px solid #ccc !important; color: black !important; }
+      .text-white, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 { color: black !important; }
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen font-sans p-6">
-    <div class="max-w-7xl mx-auto space-y-6">
+<body class="bg-darkbg text-slate-100 font-sans min-h-screen pb-12">
+
+  <!-- Header & Navigation -->
+  <header class="border-b border-bordercolor bg-cardbg/80 backdrop-blur sticky top-0 z-50 px-4 py-4 shadow-lg no-print">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🤖</span>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white">AI Stock Trader Swarm</h1>
+          <p class="text-xs text-slate-400">Autonomous Market Learning & Multi-Agent Swarm Evaluation</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <button onclick="triggerWorkflow('intraday_search')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
+          ⚡ Run Intraday Search
+        </button>
+        <button onclick="triggerWorkflow('swing_search')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
+          📈 Run Swing Search
+        </button>
+        <button onclick="openSettingsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-2 rounded-lg transition border border-slate-600">
+          ⚙️ Settings
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-8">
+
+    <!-- Section 1: Report Generator & Timeframe Selector Bar -->
+    <section class="bg-cardbg border border-bordercolor rounded-2xl p-5 shadow-xl no-print">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span>📅</span> Analytics & Report Generator
+          </h2>
+          <p class="text-xs text-slate-400">Filter AI evaluation logs, predictions, and trade performance by date range.</p>
+        </div>
+
+        <!-- Timeframe Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex bg-slate-900 p-1 rounded-xl border border-bordercolor">
+            <button onclick="setTimeframe('day')" id="tf-day" class="tf-btn text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition">1 Day</button>
+            <button onclick="setTimeframe('week')" id="tf-week" class="tf-btn text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition">1 Week</button>
+            <button onclick="setTimeframe('month')" id="tf-month" class="tf-btn text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition">1 Month</button>
+            <button onclick="setTimeframe('year')" id="tf-year" class="tf-btn text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition bg-brand-600 text-white">1 Year</button>
+            <button onclick="setTimeframe('custom')" id="tf-custom" class="tf-btn text-xs font-semibold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition">Custom</button>
+          </div>
+
+          <!-- Date Picker Inputs for Custom Mode -->
+          <div id="custom-date-container" class="hidden flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-bordercolor text-xs">
+            <input type="date" id="start-date" onchange="applyReportFilter()" class="bg-slate-800 text-slate-200 px-2 py-1 rounded border border-bordercolor focus:outline-none" />
+            <span class="text-slate-500">to</span>
+            <input type="date" id="end-date" onchange="applyReportFilter()" class="bg-slate-800 text-slate-200 px-2 py-1 rounded border border-bordercolor focus:outline-none" />
+          </div>
+
+          <!-- Export Actions -->
+          <button onclick="exportCSVReport()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl border border-bordercolor transition flex items-center gap-1.5">
+            📥 Export CSV
+          </button>
+          <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl border border-bordercolor transition flex items-center gap-1.5">
+            🖨️ Print / PDF
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Portfolio & Filtered Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-cardbg border border-bordercolor p-4 rounded-xl shadow">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Intraday Capital</div>
+        <div id="intraday-capital" class="text-2xl font-bold text-emerald-400 mt-1">₹100,000</div>
+        <div class="text-xs text-slate-500 mt-1">Dynamic Allocation Pool</div>
+      </div>
+      <div class="bg-cardbg border border-bordercolor p-4 rounded-xl shadow">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Swing Capital</div>
+        <div id="swing-capital" class="text-2xl font-bold text-blue-400 mt-1">₹100,000</div>
+        <div class="text-xs text-slate-500 mt-1">Holding Allocation Pool</div>
+      </div>
+      <div class="bg-cardbg border border-bordercolor p-4 rounded-xl shadow">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Filtered Sessions</div>
+        <div id="filtered-sessions" class="text-2xl font-bold text-purple-400 mt-1">0 Sessions</div>
+        <div id="filtered-sessions-sub" class="text-xs text-slate-500 mt-1">In Selected Window</div>
+      </div>
+      <div class="bg-cardbg border border-bordercolor p-4 rounded-xl shadow">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Swarm Consensus Avg</div>
+        <div id="swarm-consensus" class="text-2xl font-bold text-amber-400 mt-1">0% Bullish</div>
+        <div class="text-xs text-slate-500 mt-1">Period Sentiment Aggregate</div>
+      </div>
+    </div>
+
+    <!-- Section 3: AI Swarm Learning & Evaluation Report -->
+    <section class="bg-cardbg border border-bordercolor rounded-2xl p-6 shadow-xl">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-bordercolor gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📊</span> AI Swarm Learning & Evaluation Summary
+          </h2>
+          <p class="text-xs text-slate-400">Historical memory bank report powered by <code class="text-slate-300">data/debate_logs.json</code></p>
+        </div>
+        <div class="text-xs text-slate-400 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+          Last Evaluation Update: <span id="last-update" class="text-slate-200">Loading...</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <!-- Chart 1: Bull vs Bear Agent Swarm Sentiment Distribution -->
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+          <h3 class="text-sm font-semibold text-slate-300 mb-2 text-center">Period Swarm Consensus</h3>
+          <div class="relative h-48 flex justify-center items-center">
+            <canvas id="consensusChart"></canvas>
+          </div>
+          <div class="text-center text-xs text-slate-400 mt-2">
+            Bull vs Bear voting distribution over filtered timeframe
+          </div>
+        </div>
+
+        <!-- Chart 2: Historical Confidence Learning Trend -->
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 lg:col-span-2 flex flex-col justify-between">
+          <h3 class="text-sm font-semibold text-slate-300 mb-2">Confidence & Learning Progression Trend</h3>
+          <div class="relative h-48">
+            <canvas id="learningTrendChart"></canvas>
+          </div>
+          <div class="flex justify-between text-xs text-slate-400 mt-2">
+            <span>Aggregated Swarm Memory</span>
+            <span id="logs-count">0 sessions logged</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Evaluated Stock Signals Table -->
+    <section class="bg-cardbg border border-bordercolor rounded-2xl p-6 shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>⚡</span> Active & Filtered Stock Signals
+        </h2>
+        <span id="mode-badge" class="text-xs bg-brand-600/30 text-brand-400 border border-brand-500/40 px-2.5 py-1 rounded-full font-mono uppercase">
+          MODE: INTRADAY
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-800/80 text-slate-400 uppercase tracking-wider text-[11px] border-b border-bordercolor">
+            <tr>
+              <th class="py-3 px-4">Symbol</th>
+              <th class="py-3 px-4">Strategy</th>
+              <th class="py-3 px-4">Signal</th>
+              <th class="py-3 px-4">Price (₹)</th>
+              <th class="py-3 px-4">Target (₹)</th>
+              <th class="py-3 px-4">Stop Loss (₹)</th>
+              <th class="py-3 px-4">Change %</th>
+              <th class="py-3 px-4 text-right">Confidence Score</th>
+            </tr>
+          </thead>
+          <tbody id="predictions-body" class="divide-y divide-bordercolor/60 text-slate-200">
+            <tr>
+              <td colspan="8" class="text-center py-8 text-slate-500">Loading live evaluated signals from system repository...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Settings Modal for PAT Token -->
+  <div id="settingsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 no-print">
+    <div class="bg-cardbg border border-bordercolor rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">⚙️ GitHub Dispatch Settings</h3>
+      <p class="text-xs text-slate-400 mb-4">Enter your GitHub Personal Access Token (PAT) and repository info to trigger workflow runs directly from this page.</p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-300 font-semibold mb-1">GitHub Owner / Username</label>
+          <input id="gh-owner" type="text" placeholder="e.g. venkatesh700-sys" class="w-full bg-slate-900 border border-bordercolor rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 font-semibold mb-1">Repository Name</label>
+          <input id="gh-repo" type="text" placeholder="e.g. AI-Best-Stock-broker" class="w-full bg-slate-900 border border-bordercolor rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 font-semibold mb-1">GitHub PAT Token (ghp_...)</label>
+          <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-slate-900 border border-bordercolor rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500" />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-6">
+        <button onclick="closeSettingsModal()" class="text-xs px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200">Cancel</button>
+        <button onclick="saveSettings()" class="text-xs px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-semibold">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Logic JavaScript -->
+  <script>
+    let consensusChartInstance = null;
+    let learningTrendChartInstance = null;
+    
+    let rawLogs = [];
+    let rawPredictions = [];
+    let activeTimeframe = 'year';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboardData();
+      initDefaultSettings();
+    });
+
+    async function loadDashboardData() {
+      const ts = new Date().getTime();
+      
+      // Load Predictions Data
+      try {
+        const res = await fetch(`data/predictions.json?t=${ts}`);
+        if (res.ok) {
+          const data = await res.json();
+          rawPredictions = data.predictions || [];
+          renderPredictions(data);
+        }
+      } catch (e) {
+        console.warn('Predictions file note:', e);
+      }
+
+      // Load Portfolio Data
+      try {
+        const res = await fetch(`data/portfolio.json?t=${ts}`);
+        if (res.ok) {
+          const data = await res.json();
+          renderPortfolio(data);
+        }
+      } catch (e) {
+        console.warn('Portfolio file note:', e);
+      }
+
+      // Load Memory Bank Logs
+      try {
+        const res = await fetch(`data/debate_logs.json?t=${ts}`);
+        if (res.ok) {
+          rawLogs = await res.json();
+          applyReportFilter();
+        }
+      } catch (e) {
+        console.warn('Logs file note:', e);
+      }
+    }
+
+    function setTimeframe(tf) {
+      activeTimeframe = tf;
+
+      // Update button highlights
+      document.querySelectorAll('.tf-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white');
+        btn.classList.add('text-slate-300');
+      });
+
+      const activeBtn = document.getElementById(`tf-${tf}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-600', 'text-white');
+      }
+
+      const customContainer = document.getElementById('custom-date-container');
+      if (tf === 'custom') {
+        customContainer.classList.remove('hidden');
+      } else {
+        customContainer.classList.add('hidden');
+      }
+
+      applyReportFilter();
+    }
+
+    function getFilterDateBounds() {
+      const now = new Date();
+      let startTime = 0;
+      let endTime = now.getTime();
+
+      if (activeTimeframe === 'day') {
+        startTime = now.getTime() - (24 * 60 * 60 * 1000);
+      } else if (activeTimeframe === 'week') {
+        startTime = now.getTime() - (7 * 24 * 60 * 60 * 1000);
+      } else if (activeTimeframe === 'month') {
+        startTime = now.getTime() - (30 * 24 * 60 * 60 * 1000);
+      } else if (activeTimeframe === 'year') {
+        startTime = now.getTime() - (365 * 24 * 60 * 60 * 1000);
+      } else if (activeTimeframe === 'custom') {
+        const sVal = document.getElementById('start-date').value;
+        const eVal = document.getElementById('end-date').value;
+        if (sVal) startTime = new Date(sVal).getTime();
+        if (eVal) endTime = new Date(eVal + 'T23:59:59').getTime();
+      }
+
+      return { startTime, endTime };
+    }
+
+    function applyReportFilter() {
+      if (!rawLogs || !Array.isArray(rawLogs)) return;
+
+      const { startTime, endTime } = getFilterDateBounds();
+
+      const filteredLogs = rawLogs.filter(item => {
+        if (!item.timestamp) return true;
+        const itemTime = new Date(item.timestamp).getTime();
+        return itemTime >= startTime && itemTime <= endTime;
+      });
+
+      renderEvaluationReport(filteredLogs);
+    }
+
+    function renderPredictions(data) {
+      document.getElementById('mode-badge').innerText = `MODE: ${data.mode || 'UNKNOWN'}`;
+      if (data.last_updated) {
+        const dt = new Date(data.last_updated);
+        document.getElementById('last-update').innerText = dt.toLocaleString();
+      }
+
+      const tbody = document.getElementById('predictions-body');
+      tbody.innerHTML = '';
+
+      const preds = data.predictions || [];
+      if (preds.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">No predictions found in active pipeline.</td></tr>`;
+        return;
+      }
+
+      preds.forEach(p => {
+        const isBuy = p.signal === 'BUY';
+        const signalBadge = isBuy 
+          ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">BUY</span>`
+          : `<span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-bold">SELL</span>`;
         
-        <!-- Top Navigation & Control Bar -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg gap-4">
-            <div>
-                <h1 class="text-3xl font-extrabold text-blue-400">🤖 AI Stock Trader Swarm</h1>
-                <p class="text-gray-400 text-sm mt-1">Autonomous 5,200-Agent Swarm & Continuous Learning Engine</p>
-            </div>
-            
-            <div class="flex flex-wrap items-center gap-3">
-                <button onclick="triggerGitHubWorkflow('intraday_search')" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition shadow flex items-center gap-2">
-                    ⚡ Run Intraday Search
-                </button>
-                <button onclick="triggerGitHubWorkflow('swing_search')" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg transition shadow flex items-center gap-2">
-                    📈 Run Swing Search
-                </button>
-                <button onclick="toggleSettingsModal()" class="bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold p-2 rounded-lg transition" title="GitHub API Settings">
-                    ⚙️
-                </button>
-            </div>
-        </div>
+        const changeColor = p.change_pct >= 0 ? 'text-emerald-400' : 'text-rose-400';
 
-        <!-- Execution Status Alert -->
-        <div id="trigger-status" class="hidden p-4 rounded-lg text-sm font-semibold"></div>
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-slate-800/40 transition';
+        row.innerHTML = `
+          <td class="py-3 px-4 font-bold text-white">${p.symbol}</td>
+          <td class="py-3 px-4 text-slate-400 font-mono">${p.strategy}</td>
+          <td class="py-3 px-4">${signalBadge}</td>
+          <td class="py-3 px-4 font-mono text-slate-200">₹${p.price}</td>
+          <td class="py-3 px-4 font-mono text-emerald-400">₹${p.target}</td>
+          <td class="py-3 px-4 font-mono text-rose-400">₹${p.stop_loss}</td>
+          <td class="py-3 px-4 font-mono ${changeColor}">${p.change_pct > 0 ? '+' : ''}${p.change_pct}%</td>
+          <td class="py-3 px-4 text-right font-bold font-mono text-purple-400">${(p.confidence * 100).toFixed(0)}%</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
 
-        <!-- System Overview Banner -->
-        <div class="bg-gray-800 border-l-4 border-blue-500 p-4 rounded-r shadow flex justify-between items-center">
-            <div>
-                <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Dashboard State</span>
-                <p id="last-updated" class="text-sm text-gray-200 mt-1">Fetching latest market predictions...</p>
-            </div>
-            <span id="market-badge" class="px-3 py-1 text-xs font-bold rounded-full bg-gray-700 text-gray-300">
-                INIT...
-            </span>
-        </div>
+    function renderPortfolio(data) {
+      if (data.intraday_capital) {
+        document.getElementById('intraday-capital').innerText = `₹${data.intraday_capital.toLocaleString()}`;
+      }
+      if (data.swing_capital) {
+        document.getElementById('swing-capital').innerText = `₹${data.swing_capital.toLocaleString()}`;
+      }
+    }
 
-        <!-- Predictions Output -->
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold text-gray-200 mb-4">🎯 Latest Swarm Signals</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-700 text-gray-400 text-sm">
-                            <th class="py-3 px-4">Symbol</th>
-                            <th class="py-3 px-4">Strategy</th>
-                            <th class="py-3 px-4">Signal</th>
-                            <th class="py-3 px-4">Price</th>
-                            <th class="py-3 px-4">Target</th>
-                            <th class="py-3 px-4">Stop Loss</th>
-                            <th class="py-3 px-4">Confidence</th>
-                        </tr>
-                    </thead>
-                    <tbody id="predictions-table" class="divide-y divide-gray-700 text-sm">
-                        <tr><td colspan="7" class="py-4 text-center text-gray-500">Loading data...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    function renderEvaluationReport(logs) {
+      document.getElementById('filtered-sessions').innerText = `${logs.length} Sessions`;
+      document.getElementById('logs-count').innerText = `${logs.length} sessions in filtered timeframe`;
 
-        <!-- Debate Memory Log -->
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold text-gray-200 mb-4">🧠 Multi-Agent Debate Memory Bank</h2>
-            <div id="debate-logs" class="space-y-3 max-h-60 overflow-y-auto pr-2">
-                <p class="text-gray-500 text-sm">Loading historical learning sessions...</p>
-            </div>
-        </div>
-    </div>
+      if (!logs || logs.length === 0) {
+        document.getElementById('swarm-consensus').innerText = `0% Bullish`;
+        if (consensusChartInstance) consensusChartInstance.destroy();
+        if (learningTrendChartInstance) learningTrendChartInstance.destroy();
+        return;
+      }
 
-    <!-- API Token Settings Modal -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 max-w-md w-full space-y-4">
-            <h3 class="text-lg font-bold text-white">⚙️ GitHub Token Configuration</h3>
-            <p class="text-xs text-gray-400">Enter a GitHub Personal Access Token (PAT) with <code class="bg-gray-900 px-1 py-0.5 rounded text-blue-300">repo</code> scope to trigger searches directly from this web page.</p>
-            
-            <input type="password" id="github-token" placeholder="ghp_XXXXXXXXXXXXXXXXXXXX" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-            
-            <div class="flex justify-end gap-2">
-                <button onclick="toggleSettingsModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-xs font-bold">Cancel</button>
-                <button onclick="saveToken()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded text-xs font-bold text-white">Save Token</button>
-            </div>
-        </div>
-    </div>
+      let totalBull = 0;
+      let totalBear = 0;
+      let totalCount = 0;
 
-    <script>
-        const REPO_OWNER = "venkatesh700-sys";
-        const REPO_NAME = "AI-Best-Stock-broker";
-        const WORKFLOW_FILE = "daily_trading.yml";
+      logs.forEach(session => {
+        const debates = session.debate_summary || [];
+        debates.forEach(d => {
+          totalBull += d.bull_score || 50;
+          totalBear += d.bear_score || 50;
+          totalCount++;
+        });
+      });
 
-        async function loadDashboardData() {
-            try {
-                const res = await fetch('data/predictions.json?' + new Date().getTime());
-                if (!res.ok) throw new Error("No predictions file found");
-                const data = await res.json();
-                
-                document.getElementById('last-updated').innerText = 
-                    `Last Swarm Session: ${new Date(data.last_updated).toLocaleString()} | Execution Mode: ${data.mode.toUpperCase()}`;
-                
-                document.getElementById('market-badge').innerText = `MODE: ${data.mode.toUpperCase()}`;
-                document.getElementById('market-badge').className = "px-3 py-1 text-xs font-bold rounded-full bg-green-900 text-green-300";
+      const avgBull = totalCount > 0 ? Math.round(totalBull / totalCount) : 50;
+      const avgBear = totalCount > 0 ? Math.round(totalBear / totalCount) : 50;
 
-                const tbody = document.getElementById('predictions-table');
-                tbody.innerHTML = data.predictions.map(p => `
-                    <tr class="hover:bg-gray-750">
-                        <td class="py-3 px-4 font-bold text-white">${p.symbol}</td>
-                        <td class="py-3 px-4"><span class="px-2 py-1 text-xs rounded ${p.strategy === 'INTRADAY' ? 'bg-blue-900 text-blue-300' : 'bg-purple-900 text-purple-300'}">${p.strategy}</span></td>
-                        <td class="py-3 px-4 font-bold ${p.signal === 'BUY' ? 'text-green-400' : 'text-red-400'}">${p.signal}</td>
-                        <td class="py-3 px-4">₹${p.price.toFixed(2)}</td>
-                        <td class="py-3 px-4 text-green-400">₹${p.target.toFixed(2)}</td>
-                        <td class="py-3 px-4 text-red-400">₹${p.stop_loss.toFixed(2)}</td>
-                        <td class="py-3 px-4">${(p.confidence * 100).toFixed(0)}%</td>
-                    </tr>
-                `).join('');
-            } catch (e) {
-                document.getElementById('last-updated').innerText = "Dashboard online. Awaiting first workflow run output.";
-            }
+      document.getElementById('swarm-consensus').innerText = `${avgBull}% Bullish`;
 
-            try {
-                const resLogs = await fetch('data/debate_logs.json?' + new Date().getTime());
-                const logs = await resLogs.json();
-                const logContainer = document.getElementById('debate-logs');
-                logContainer.innerHTML = logs.slice(-5).reverse().map(log => `
-                    <div class="bg-gray-900 p-3 rounded border border-gray-700 text-xs">
-                        <span class="text-blue-400 font-bold">[${new Date(log.timestamp).toLocaleTimeString()}]</span> 
-                        <span class="text-gray-300 font-semibold">Mode: ${log.mode}</span> - Processed ${log.top_signals ? log.top_signals.length : 0} signals into 365-day memory bank.
-                    </div>
-                `).join('');
-            } catch (e) {}
+      // Render Donut Chart
+      const ctx1 = document.getElementById('consensusChart').getContext('2d');
+      if (consensusChartInstance) consensusChartInstance.destroy();
+
+      consensusChartInstance = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+          labels: ['Bullish Agents', 'Bearish Agents'],
+          datasets: [{
+            data: [avgBull, avgBear],
+            backgroundColor: ['#10b981', '#f43f5e'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } }
+          }
         }
+      });
 
-        async function triggerGitHubWorkflow(mode) {
-            const token = localStorage.getItem('gh_pat_token');
-            if (!token) {
-                alert("Please click the ⚙️ settings icon to enter your GitHub Personal Access Token first so the page can dispatch jobs.");
-                toggleSettingsModal();
-                return;
-            }
+      // Render Line Chart
+      const labels = logs.map((_, i) => `Run #${i + 1}`);
+      const confidenceScores = logs.map(l => {
+        const top = l.top_signals || [];
+        if (top.length === 0) return 75;
+        const avgConf = top.reduce((acc, curr) => acc + (curr.confidence || 0.75), 0) / top.length;
+        return Math.round(avgConf * 100);
+      });
 
-            showStatus(`🚀 Dispatching ${mode.toUpperCase()} request to GitHub Actions...`, "bg-blue-900 text-blue-200");
+      const ctx2 = document.getElementById('learningTrendChart').getContext('2d');
+      if (learningTrendChartInstance) learningTrendChartInstance.destroy();
 
-            try {
-                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_FILE}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ref: 'main',
-                        inputs: { mode: mode }
-                    })
-                });
-
-                if (response.status === 204) {
-                    showStatus(`✅ ${mode.toUpperCase()} workflow triggered! The AI agent swarm is now evaluating market data and learning. Refreshing page data in 45 seconds...`, "bg-green-900 text-green-200");
-                    setTimeout(loadDashboardData, 45000);
-                } else {
-                    const err = await response.json();
-                    showStatus(`❌ Trigger failed: ${err.message || response.statusText}. Verify your GitHub token.`, "bg-red-900 text-red-200");
-                }
-            } catch (err) {
-                showStatus(`❌ Network error triggering workflow: ${err.message}`, "bg-red-900 text-red-200");
-            }
+      learningTrendChartInstance = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Average Swarm Confidence (%)',
+            data: confidenceScores,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#60a5fa'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+            y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#1e293b' }, min: 50, max: 100 }
+          },
+          plugins: {
+            legend: { display: false }
+          }
         }
+      });
+    }
 
-        function showStatus(msg, bgClass) {
-            const el = document.getElementById('trigger-status');
-            el.className = `p-4 rounded-lg text-sm font-semibold block ${bgClass}`;
-            el.innerText = msg;
+    function exportCSVReport() {
+      if (!rawPredictions || rawPredictions.length === 0) {
+        alert("No active predictions to export.");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,Symbol,Strategy,Signal,Price,Target,StopLoss,ChangePct,ConfidenceScore\n";
+
+      rawPredictions.forEach(p => {
+        csvContent += `${p.symbol},${p.strategy},${p.signal},${p.price},${p.target},${p.stop_loss},${p.change_pct}%,${(p.confidence * 100).toFixed(0)}%\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `AI_Stock_Report_${activeTimeframe}_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function initDefaultSettings() {
+      document.getElementById('gh-owner').value = localStorage.getItem('gh_owner') || 'venkatesh700-sys';
+      document.getElementById('gh-repo').value = localStorage.getItem('gh_repo') || 'AI-Best-Stock-broker';
+      document.getElementById('gh-token').value = localStorage.getItem('gh_token') || '';
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function saveSettings() {
+      const owner = document.getElementById('gh-owner').value.trim();
+      const repo = document.getElementById('gh-repo').value.trim();
+      const token = document.getElementById('gh-token').value.trim();
+
+      localStorage.setItem('gh_owner', owner);
+      localStorage.setItem('gh_repo', repo);
+      localStorage.setItem('gh_token', token);
+
+      closeSettingsModal();
+      alert('Settings saved successfully!');
+    }
+
+    async function triggerWorkflow(mode) {
+      const owner = localStorage.getItem('gh_owner') || 'venkatesh700-sys';
+      const repo = localStorage.getItem('gh_repo') || 'AI-Best-Stock-broker';
+      const token = localStorage.getItem('gh_token');
+
+      if (!token) {
+        alert('Please click ⚙️ Settings and enter your GitHub PAT token first.');
+        openSettingsModal();
+        return;
+      }
+
+      const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/daily_trading.yml/dispatches`;
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json'
+          },
+          body: JSON.stringify({
+            ref: 'main',
+            inputs: { mode: mode }
+          })
+        });
+
+        if (res.status === 204) {
+          alert(`🚀 Workflow triggered successfully for mode: ${mode.toUpperCase()}!\nCheck your GitHub Actions tab and Telegram app for live updates.`);
+        } else {
+          const errText = await res.text();
+          alert(`Failed to trigger workflow (${res.status}): ${errText}`);
         }
-
-        function toggleSettingsModal() {
-            const modal = document.getElementById('settings-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-            if (!modal.classList.contains('hidden')) {
-                document.getElementById('github-token').value = localStorage.getItem('gh_pat_token') || '';
-            }
-        }
-
-        function saveToken() {
-            const token = document.getElementById('github-token').value.trim();
-            if (token) {
-                localStorage.setItem('gh_pat_token', token);
-                alert('GitHub PAT saved to browser storage!');
-                toggleSettingsModal();
-            } else {
-                localStorage.removeItem('gh_pat_token');
-            }
-        }
-
-        window.onload = loadDashboardData;
-    </script>
+      } catch (e) {
+        alert(`Error connecting to GitHub API: ${e.message}`);
+      }
+    }
+  </script>
 </body>
 </html>
