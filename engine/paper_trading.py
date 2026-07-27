@@ -2,79 +2,91 @@ import json
 import os
 from datetime import datetime
 
-class PaperTradingEngine:
-    def __init__(self, filepath="data/paper_trading.json"):
-        self.filepath = filepath
-        self.data = self._load()
+PORTFOLIO_FILE = "data/portfolio.json"
 
-    def _load(self):
-        if os.path.exists(self.filepath):
-            with open(self.filepath, "r") as f:
-                return json.load(f)
-        return {
-            "intraday_capital": 200000.0,
-            "swing_capital": 200000.0,
-            "active_intraday_positions": [],
-            "active_swing_positions": [],
-            "completed_trades": []
-        }
+DEFAULT_PORTFOLIO = {
+    "intraday_capital": 100000.0,
+    "swing_capital": 100000.0,
+    "cash": 200000.0,
+    "intraday_positions": [],
+    "swing_positions": [],
+    "positions": [],
+    "history": [],
+    "last_updated": ""
+}
 
-    def save(self):
-        with open(self.filepath, "w") as f:
-            json.dump(self.data, f, indent=2)
+def load_portfolio():
+    """Loads portfolio state from disk and injects missing default keys."""
+    if not os.path.exists(PORTFOLIO_FILE):
+        save_portfolio(DEFAULT_PORTFOLIO)
+        return DEFAULT_PORTFOLIO.copy()
+    
+    try:
+        with open(PORTFOLIO_FILE, "r") as f:
+            data = json.load(f)
+        for key, val in DEFAULT_PORTFOLIO.items():
+            if key not in data:
+                data[key] = val
+        return data
+    except Exception as e:
+        print(f"⚠️ Portfolio load note: {e}. Re-initializing state.")
+        save_portfolio(DEFAULT_PORTFOLIO)
+        return DEFAULT_PORTFOLIO.copy()
 
-    def execute_morning_allocation(self, top_intraday, top_swing):
-        today = datetime.now().strftime("%Y-%m-%d")
+def save_portfolio(data):
+    """Saves portfolio state to data/portfolio.json."""
+    os.makedirs("data", exist_ok=True)
+    data["last_updated"] = datetime.now().isoformat()
+    with open(PORTFOLIO_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+
+def execute_paper_trades(predictions, mode):
+    """
+    Executes paper trades safely across dynamic intraday and swing search predictions.
+    """
+    portfolio = load_portfolio()
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    trades_executed = []
+
+    if mode in ["morning", "intraday_search"]:
+        intraday_preds = predictions[:5]
+        alloc = portfolio.get("intraday_capital", 100000.0) / max(len(intraday_preds), 1)
         
-        intra_alloc = self.data.get("intraday_capital", 100000) / max(1, len(top_intraday))
-        self.data["active_intraday_positions"] = []
-        for stock in top_intraday:
-            qty = int(intra_alloc // stock["entry_price"])
-            if qty > 0:
-                self.data["active_intraday_positions"].append({
-                    "date": today,
-                    "symbol": stock["symbol"],
-                    "qty": qty,
-                    "entry_price": stock["entry_price"],
-                    "target": stock["target_price"],
-                    "stop_loss": stock["stop_loss"],
-                    "allocated_capital": round(qty * stock["entry_price"], 2),
-                    "status": "OPEN"
-                })
+        for p in intraday_preds:
+            price = p.get("price", 100.0)
+            trade = {
+                "timestamp": timestamp,
+                "mode": mode,
+                "type": "INTRADAY",
+                "symbol": p.get("symbol"),
+                "action": p.get("signal"),
+                "price": price,
+                "quantity": max(1, int(alloc / max(price, 1))),
+                "status": "OPEN"
+            }
+            trades_executed.append(trade)
+            portfolio["intraday_positions"].append(trade)
+            portfolio["history"].append(trade)
 
-        swing_alloc = self.data.get("swing_capital", 100000) / max(1, len(top_swing))
-        self.data["active_swing_positions"] = []
-        for stock in top_swing:
-            qty = int(swing_alloc // stock["entry_price"])
-            if qty > 0:
-                self.data["active_swing_positions"].append({
-                    "date": today,
-                    "symbol": stock["symbol"],
-                    "qty": qty,
-                    "entry_price": stock["entry_price"],
-                    "target": stock["target_price"],
-                    "stop_loss": stock["stop_loss"],
-                    "allocated_capital": round(qty * stock["entry_price"], 2),
-                    "status": "OPEN"
-                })
+    elif mode in ["evening", "swing_search"]:
+        swing_preds = predictions[:10]
+        alloc = portfolio.get("swing_capital", 100000.0) / max(len(swing_preds), 1)
 
-        self.save()
+        for p in swing_preds:
+            price = p.get("price", 100.0)
+            trade = {
+                "timestamp": timestamp,
+                "mode": mode,
+                "type": "SWING",
+                "symbol": p.get("symbol"),
+                "action": p.get("signal"),
+                "price": price,
+                "quantity": max(1, int(alloc / max(price, 1))),
+                "status": "HOLDING"
+            }
+            trades_executed.append(trade)
+            portfolio["swing_positions"].append(trade)
+            portfolio["history"].append(trade)
 
-    def settle_intraday_market_close(self, current_market_data):
-        total_pnl = 0.0
-        for pos in self.data["active_intraday_positions"]:
-            sym = pos["symbol"]
-            curr_price = current_market_data.get(sym, {}).get("current_price", pos["entry_price"])
-            
-            pnl = (curr_price - pos["entry_price"]) * pos["qty"]
-            pos["exit_price"] = curr_price
-            pos["pnl"] = round(pnl, 2)
-            pos["status"] = "CLOSED"
-            
-            total_pnl += pnl
-            self.data["completed_trades"].append(pos)
-
-        self.data["intraday_capital"] = round(self.data["intraday_capital"] + total_pnl, 2)
-        self.data["active_intraday_positions"] = []
-        self.save()
-        return total_pnl
+    save_portfolio(portfolio)
+    return trades_executed
