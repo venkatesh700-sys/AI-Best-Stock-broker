@@ -1,9 +1,25 @@
+Here is the complete updated **`index.html`** with real-time execution status tracking and automatic live polling built in.
+
+When you click **Run Intraday Search** or **Run Swing Search**, the dashboard will now:
+
+1. Show an active **Execution & Polling Status Banner** with a loading spinner right on your screen.
+2. Automatically poll `data/predictions.json` every 10 seconds in the background.
+3. Automatically update the tables, sentiment charts, and metrics on your screen as soon as the GitHub Action completes and publishes new data—without requiring a manual browser refresh.
+
+---
+
+### File: `index.html`
+
+> **Path:** `index.html` (in your repository root)
+> *Replaces your current `index.html` file.*
+
+```html
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Stock Trader | Swarm Analytics & Report Generator</title>
+  <title>AI Stock Trader | Swarm Analytics & Live Execution Dashboard</title>
   <!-- Tailwind CSS & Chart.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,6 +39,13 @@
     }
   </script>
   <style>
+    @keyframes pulse-fast {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-pulse-fast {
+      animation: pulse-fast 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
     @media print {
       body { background-color: white !important; color: black !important; }
       header, button, .no-print { display: none !important; }
@@ -45,11 +68,11 @@
       </div>
       
       <div class="flex items-center gap-2">
-        <button onclick="triggerWorkflow('intraday_search')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
-          ⚡ Run Intraday Search
+        <button id="btn-intraday" onclick="triggerWorkflow('intraday_search')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow flex items-center gap-1.5">
+          <span>⚡</span> Run Intraday Search
         </button>
-        <button onclick="triggerWorkflow('swing_search')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
-          📈 Run Swing Search
+        <button id="btn-swing" onclick="triggerWorkflow('swing_search')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow flex items-center gap-1.5">
+          <span>📈</span> Run Swing Search
         </button>
         <a href="performance.html" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow flex items-center gap-1">
           📊 Win Rate & Power Factor
@@ -61,7 +84,27 @@
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
+
+    <!-- Live Execution & Polling Banner -->
+    <div id="execution-status" class="hidden bg-slate-800/90 border border-brand-500/50 rounded-2xl p-4 shadow-2xl no-print">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="status-spinner" class="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <div>
+            <div id="status-title" class="text-sm font-bold text-white flex items-center gap-2">
+              Executing Swarm Analysis...
+            </div>
+            <div id="status-subtitle" class="text-xs text-slate-400">
+              GitHub Action triggered. Polling repository for published predictions...
+            </div>
+          </div>
+        </div>
+        <div id="status-timer" class="text-xs font-mono bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-brand-400 animate-pulse-fast">
+          Elapsed: 0s
+        </div>
+      </div>
+    </div>
 
     <!-- Section 1: Report Generator & Timeframe Selector Bar -->
     <section class="bg-cardbg border border-bordercolor rounded-2xl p-5 shadow-xl no-print">
@@ -90,7 +133,10 @@
             <input type="date" id="end-date" onchange="applyReportFilter()" class="bg-slate-800 text-slate-200 px-2 py-1 rounded border border-bordercolor focus:outline-none" />
           </div>
 
-          <!-- Export Actions -->
+          <!-- Export & Manual Refresh Actions -->
+          <button onclick="loadDashboardData(true)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl border border-bordercolor transition flex items-center gap-1.5">
+            🔄 Refresh Dashboard
+          </button>
           <button onclick="exportCSVReport()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl border border-bordercolor transition flex items-center gap-1.5">
             📥 Export CSV
           </button>
@@ -238,19 +284,28 @@
     let rawPredictions = [];
     let activeTimeframe = 'year';
 
+    let initialLastUpdated = null;
+    let pollingTimer = null;
+    let timerInterval = null;
+    let secondsElapsed = 0;
+
     document.addEventListener('DOMContentLoaded', () => {
       loadDashboardData();
       initDefaultSettings();
     });
 
-    async function loadDashboardData() {
+    async function loadDashboardData(showNotice = false) {
       const ts = new Date().getTime();
-      
+      let hasUpdated = false;
+
       // Load Predictions Data
       try {
-        const res = await fetch(`data/predictions.json?t=${ts}`);
+        const res = await fetch(`data/predictions.json?t=${ts}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
+          if (data.last_updated && data.last_updated !== initialLastUpdated) {
+            hasUpdated = true;
+          }
           rawPredictions = data.predictions || [];
           renderPredictions(data);
         }
@@ -260,7 +315,7 @@
 
       // Load Portfolio Data
       try {
-        const res = await fetch(`data/portfolio.json?t=${ts}`);
+        const res = await fetch(`data/portfolio.json?t=${ts}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           renderPortfolio(data);
@@ -271,7 +326,7 @@
 
       // Load Memory Bank Logs
       try {
-        const res = await fetch(`data/debate_logs.json?t=${ts}`);
+        const res = await fetch(`data/debate_logs.json?t=${ts}`, { cache: 'no-store' });
         if (res.ok) {
           rawLogs = await res.json();
           applyReportFilter();
@@ -279,12 +334,17 @@
       } catch (e) {
         console.warn('Logs file note:', e);
       }
+
+      if (showNotice && hasUpdated) {
+        showExecutionSuccess("Dashboard refreshed with newest published predictions!");
+      }
+
+      return hasUpdated;
     }
 
     function setTimeframe(tf) {
       activeTimeframe = tf;
 
-      // Update button highlights
       document.querySelectorAll('.tf-btn').forEach(btn => {
         btn.classList.remove('bg-brand-600', 'text-white');
         btn.classList.add('text-slate-300');
@@ -345,6 +405,7 @@
     function renderPredictions(data) {
       document.getElementById('mode-badge').innerText = `MODE: ${data.mode || 'UNKNOWN'}`;
       if (data.last_updated) {
+        initialLastUpdated = data.last_updated;
         const dt = new Date(data.last_updated);
         document.getElementById('last-update').innerText = dt.toLocaleString();
       }
@@ -354,7 +415,7 @@
 
       const preds = data.predictions || [];
       if (preds.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">No predictions found in active pipeline.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">No active stock predictions found in pipeline.</td></tr>`;
         return;
       }
 
@@ -558,7 +619,7 @@
         });
 
         if (res.status === 204) {
-          alert(`🚀 Workflow triggered successfully for mode: ${mode.toUpperCase()}!\nCheck your GitHub Actions tab and Telegram app for live updates.`);
+          startExecutionTracking(mode);
         } else {
           const errText = await res.text();
           alert(`Failed to trigger workflow (${res.status}): ${errText}`);
@@ -567,6 +628,57 @@
         alert(`Error connecting to GitHub API: ${e.message}`);
       }
     }
+
+    function startExecutionTracking(mode) {
+      clearInterval(pollingTimer);
+      clearInterval(timerInterval);
+
+      secondsElapsed = 0;
+      const statusContainer = document.getElementById('execution-status');
+      const statusTitle = document.getElementById('status-title');
+      const statusSubtitle = document.getElementById('status-subtitle');
+      const statusTimer = document.getElementById('status-timer');
+      const spinner = document.getElementById('status-spinner');
+
+      statusContainer.classList.remove('hidden');
+      spinner.classList.remove('hidden');
+      statusTitle.innerHTML = `🚀 ${mode.toUpperCase()} Swarm Analysis Triggered!`;
+      statusSubtitle.innerText = 'GitHub Actions worker is evaluating market indicators. Polling dashboard for published predictions...';
+      statusTimer.innerText = 'Elapsed: 0s';
+
+      timerInterval = setInterval(() => {
+        secondsElapsed += 2;
+        statusTimer.innerText = `Elapsed: ${secondsElapsed}s`;
+      }, 2000);
+
+      // Start polling every 8 seconds for data updates
+      pollingTimer = setInterval(async () => {
+        const updated = await loadDashboardData();
+        if (updated) {
+          showExecutionSuccess(`New ${mode.toUpperCase()} signals published successfully!`);
+        }
+      }, 8000);
+    }
+
+    function showExecutionSuccess(msg) {
+      clearInterval(pollingTimer);
+      clearInterval(timerInterval);
+
+      const statusContainer = document.getElementById('execution-status');
+      const statusTitle = document.getElementById('status-title');
+      const statusSubtitle = document.getElementById('status-subtitle');
+      const spinner = document.getElementById('status-spinner');
+
+      spinner.classList.add('hidden');
+      statusTitle.innerHTML = `✅ Data Updated Successfully!`;
+      statusSubtitle.innerText = msg;
+
+      setTimeout(() => {
+        statusContainer.classList.add('hidden');
+      }, 7000);
+    }
   </script>
 </body>
 </html>
+
+```
