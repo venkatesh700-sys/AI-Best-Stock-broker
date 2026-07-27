@@ -26,7 +26,7 @@ class PaperTradingEngine:
     def execute_morning_allocation(self, top_intraday, top_swing):
         today = datetime.now().strftime("%Y-%m-%d")
         
-        intra_alloc = self.data["intraday_capital"] / max(1, len(top_intraday))
+        intra_alloc = self.data.get("intraday_capital", 100000) / max(1, len(top_intraday))
         self.data["active_intraday_positions"] = []
         for stock in top_intraday:
             qty = int(intra_alloc // stock["entry_price"])
@@ -42,7 +42,7 @@ class PaperTradingEngine:
                     "status": "OPEN"
                 })
 
-        swing_alloc = self.data["swing_capital"] / max(1, len(top_swing))
+        swing_alloc = self.data.get("swing_capital", 100000) / max(1, len(top_swing))
         self.data["active_swing_positions"] = []
         for stock in top_swing:
             qty = int(swing_alloc // stock["entry_price"])
