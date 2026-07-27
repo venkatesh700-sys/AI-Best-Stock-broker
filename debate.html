@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stock Trader Swarm - Agent Debate Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: { 900: '#0b0f19', 800: '#111827', 700: '#1f2937', 600: '#374151' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-slate-800 bg-dark-800/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🤖</span>
+                <h1 class="font-bold text-lg text-white tracking-wide">AI Swarm Trader <span class="text-indigo-400 text-xs uppercase px-2 py-0.5 bg-indigo-500/20 rounded-full">Nifty 500</span></h1>
+            </div>
+            <nav class="flex items-center gap-2">
+                <a href="index.html" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">Dashboard</a>
+                <a href="performance.html" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition">Performance</a>
+                <a href="debate.html" class="px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">Debate Room</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full space-y-8">
+
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-2xl font-black text-white">50-Agent Adversarial Debate & Learning Matrix</h2>
+                <p class="text-sm text-slate-400 mt-1">Inspect what the agents are debating, how adversarial committees evaluate risk, and how verdicts are published.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live Memory Active
+                </span>
+            </div>
+        </div>
+
+        <!-- Section 1: How the Debate & Publishing Process Works -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-dark-800 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold mb-4 text-lg">1</div>
+                <h3 class="font-bold text-white text-base mb-2">What They Debate</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Agents ingest raw multi-pod metrics (Trend, Liquidity, Momentum, Sector Strength) and compare current price behavior against historical volatility thresholds and order book depths.
+                </p>
+            </div>
+            <div class="bg-dark-800 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold mb-4 text-lg">2</div>
+                <h3 class="font-bold text-white text-base mb-2">How They Debate</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Split into <strong>20 Bullish Prosecutors</strong> (growth/momentum case), <strong>20 Bearish Skeptics</strong> (trap/slippage detectors), and <strong>10 Historical Judges</strong> (memory learning bank) who cross-examine every candidate.
+                </p>
+            </div>
+            <div class="bg-dark-800 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold mb-4 text-lg">3</div>
+                <h3 class="font-bold text-white text-base mb-2">How Results are Published</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    If net consensus score exceeds <strong>65%</strong> and Risk-to-Reward is <strong>&ge; 2.2:1</strong>, the verdict is published to <code class="text-indigo-300 bg-indigo-950 px-1.5 py-0.5 rounded">predictions.json</code> and transcripts are saved in <code class="text-indigo-300 bg-indigo-950 px-1.5 py-0.5 rounded">debate_logs.json</code>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 2: Real-Time Live Debate Feed from Backend -->
+        <div class="bg-dark-800 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        💬 Active Agent Debate Transcripts & Autonomous Memory Log
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Real-time transcripts recorded from the latest Intraday or Swing scan execution.</p>
+                </div>
+                <button onclick="loadDebateLogs()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs font-semibold rounded-lg transition text-slate-200">
+                    🔄 Refresh Feed
+                </button>
+            </div>
+
+            <!-- Debate Transcripts Container -->
+            <div id="full-debate-container" class="space-y-4">
+                <div class="text-center py-12 text-slate-500 text-sm">
+                    Loading live debate transcripts from <code class="text-slate-400">data/debate_logs.json</code>...
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-dark-800/30 py-6 text-center text-xs text-slate-500">
+        AI Stock Trader Swarm • Autonomous Multi-Agent Decision Engine
+    </footer>
+
+    <!-- Script to Load & Render Debate Transcripts -->
+    <script>
+        async function loadDebateLogs() {
+            const container = document.getElementById('full-debate-container');
+            try {
+                const response = await fetch('data/debate_logs.json?' + new Date().getTime());
+                if (!response.ok) {
+                    container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">No debate logs found yet. Run an Intraday or Swing search from the dashboard to generate agent transcripts.</div>`;
+                    return;
+                }
+                const data = await response.json();
+                
+                if (!data.transcripts || data.transcripts.length === 0) {
+                    container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Debate file found, but no stock candidates passed initial pod filters during the last run.</div>`;
+                    return;
+                }
+
+                let html = '';
+                
+                // Show historical memory lessons learned banner if available
+                if (data.lessons_learned && data.lessons_learned.length > 0) {
+                    html += `
+                        <div class="bg-indigo-950/40 border border-indigo-800/50 rounded-xl p-4 mb-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-2">🧠 Autonomous Learning Memory Bank (Experience Log)</h4>
+                            <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+                                ${data.lessons_learned.map(l => `<li>${l}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Render each stock's debate transcript
+                html += data.transcripts.map(t => `
+                    <div class="bg-slate-900/80 border border-slate-700/60 rounded-xl p-5 shadow-lg space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <span class="text-base font-black text-white px-3 py-1 bg-slate-800 rounded-lg">${t.symbol}</span>
+                                <span class="text-xs text-slate-400 font-medium">${t.participants}</span>
+                            </div>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full ${t.consensus_reached === 'APPROVED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                                ${t.consensus_reached} • Final Score: ${t.final_debate_score}
+                            </span>
+                        </div>
+                        
+                        <div class="space-y-1.5 pt-1">
+                            <h5 class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Adversarial Exchange & Arguments:</h5>
+                            <div class="bg-slate-950/60 rounded-lg p-3 space-y-2 border border-slate-800/80">
+                                ${t.arguments.map(arg => `
+                                    <p class="text-xs text-slate-300 flex items-start gap-2">
+                                        <span class="text-indigo-400 mt-0.5">▶</span> <span>${arg}</span>
+                                    </p>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        ${t.historical_lessons_applied && t.historical_lessons_applied.length > 0 ? `
+                            <div class="text-[11px] text-purple-300 bg-purple-950/30 border border-purple-900/40 p-2.5 rounded-lg flex items-center gap-2">
+                                <span>⚡</span> <span><strong>Historical Experience Applied:</strong> ${t.historical_lessons_applied.join(', ')}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+                container.innerHTML = html;
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = `<div class="text-center py-12 text-rose-400 text-sm">Error loading debate logs. Please make sure the backend pipeline has executed at least once.</div>`;
+            }
+        }
+
+        loadDebateLogs();
+        setInterval(loadDebateLogs, 10000); // Poll every 10 seconds
+    </script>
+
+</body>
+</html>
