@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI: The Best Stock Trader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="h-9 w-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl">🚀</div>
+        <h1 class="text-xl font-bold tracking-wide bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
+          AI: The Best Stock Trader
+        </h1>
+      </div>
+      <div class="flex space-x-2">
+        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white">Dashboard</button>
+        <button onclick="switchTab('debate')" id="tab-debate" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:bg-slate-800">Live Debate Terminal</button>
+        <button onclick="switchTab('reports')" id="tab-reports" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:bg-slate-800">Reports</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full">
+    <div id="view-dashboard" class="space-y-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-bold text-blue-400">⚡ Intraday Day Trading Panel</h2>
+              <span class="text-xs bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-full border border-blue-500/30">Auto Square-off 3:15 PM</span>
+            </div>
+            <p class="text-sm text-slate-400 mb-4">High-frequency agent swarm monitoring short-term volatility and VWAP momentum.</p>
+            <div class="text-2xl font-extrabold text-slate-100 mb-4">Capital: <span id="intraday-cap">₹2,00,000</span></div>
+          </div>
+          <button class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-bold transition">
+            Run Day Trading Search Now
+          </button>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-bold text-indigo-400">📈 Swing Trading Panel</h2>
+              <span class="text-xs bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-500/30">Holding: 2–4 Days</span>
+            </div>
+            <p class="text-sm text-slate-400 mb-4">Multi-day trend continuation engine evaluating delivery volume % and breakouts.</p>
+            <div class="text-2xl font-extrabold text-slate-100 mb-4">Capital: <span id="swing-cap">₹2,00,000</span></div>
+          </div>
+          <button class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-lg font-bold transition">
+            Run Swing Trading Search Now
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h3 class="text-md font-bold text-slate-200 mb-4">🔥 Top 5 Intraday Paper Positions</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+                <tr><th class="p-3">Stock</th><th class="p-3">Entry</th><th class="p-3">Target</th><th class="p-3">SL</th><th class="p-3">Conf %</th></tr>
+              </thead>
+              <tbody id="intraday-table" class="divide-y divide-slate-800">
+                <tr><td colspan="5" class="p-4 text-center text-slate-500">Loading dynamic signals...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h3 class="text-md font-bold text-slate-200 mb-4">🎯 Top 10 Swing Trade Candidates</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="bg-slate-950 text-slate-400 uppercase text-xs">
+                <tr><th class="p-3">Stock</th><th class="p-3">Entry</th><th class="p-3">Target</th><th class="p-3">SL</th><th class="p-3">Conf %</th></tr>
+              </thead>
+              <tbody id="swing-table" class="divide-y divide-slate-800">
+                <tr><td colspan="5" class="p-4 text-center text-slate-500">Loading dynamic signals...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-debate" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <h2 class="text-lg font-bold text-slate-100 mb-2">🤖 5,200 Agent Debate (MAD) Stream</h2>
+        <div id="debate-terminal" class="bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs text-green-400 h-96 overflow-y-auto space-y-3">
+          <div class="text-slate-500">[System] Debate stream initializing...</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-reports" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+        <h2 class="text-lg font-bold text-slate-100 mb-4">📁 365-Day Rolling Retention Reports</h2>
+        <div id="reports-list" class="space-y-3"><div class="text-slate-500 text-sm">Loading rolling memory...</div></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function switchTab(tabName) {
+      ['dashboard', 'debate', 'reports'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).classList.remove('bg-blue-600', 'text-white');
+        document.getElementById(`tab-${t}`).classList.add('text-slate-400');
+      });
+      document.getElementById(`view-${tabName}`).classList.remove('hidden');
+      document.getElementById(`tab-${tabName}`).classList.add('bg-blue-600', 'text-white');
+    }
+
+    async function loadData() {
+      try {
+        const predRes = await fetch('data/predictions.json');
+        if (predRes.ok) {
+          const preds = await predRes.json();
+          renderTable('intraday-table', preds.top_intraday || []);
+          renderTable('swing-table', preds.top_swing || []);
+        }
+        const debateRes = await fetch('data/debate_logs.json');
+        if (debateRes.ok) {
+          const debates = await debateRes.json();
+          const term = document.getElementById('debate-terminal');
+          term.innerHTML = '';
+          for (const [stock, lines] of Object.entries(debates)) {
+            term.innerHTML += `<div class="text-yellow-400 font-bold mt-2">=== DEBATE STREAM FOR ${stock} ===</div>`;
+            lines.forEach(l => { term.innerHTML += `<div class="pl-2">${l}</div>`; });
+          }
+        }
+      } catch (e) { console.log(e); }
+    }
+
+    function renderTable(elementId, items) {
+      const tbody = document.getElementById(elementId);
+      if (!items.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">No active signals generated yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = items.map(s => `
+        <tr class="hover:bg-slate-800/50">
+          <td class="p-3 font-bold text-slate-100">${s.symbol}</td>
+          <td class="p-3">₹${s.entry_price}</td>
+          <td class="p-3 text-emerald-400">₹${s.target_price}</td>
+          <td class="p-3 text-rose-400">₹${s.stop_loss}</td>
+          <td class="p-3 font-bold text-blue-400">${s.confidence}%</td>
+        </tr>
+      `).join('');
+    }
+    window.onload = loadData;
+  </script>
+</body>
+</html>
