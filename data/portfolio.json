@@ -1,0 +1,10 @@
+{
+  "intraday_capital": 100000.0,
+  "swing_capital": 100000.0,
+  "cash": 200000.0,
+  "intraday_positions": [],
+  "swing_positions": [],
+  "positions": [],
+  "history": [],
+  "last_updated": "2026-07-27T15:09:37.052120"
+}
