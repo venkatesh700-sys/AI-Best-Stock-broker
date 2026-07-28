@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-28T06:26:15.231884Z",
+  "timestamp": "2026-07-28T06:28:24.657300Z",
   "total_debate_agents": 50,
   "lessons_learned": [
     "Avoid low volume breakouts during high market VIX.",
@@ -127,21 +127,6 @@
       "final_debate_score": "65%"
     },
     {
-      "symbol": "JSWSTEEL.NS",
-      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
-      "historical_lessons_applied": [
-        "Avoid low volume breakouts during high market VIX.",
-        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
-      ],
-      "arguments": [
-        "Bullish Agent Group A: Trend structure on JSWSTEEL.NS confirms institutional accumulation.",
-        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
-        "Bearish Agent Group X: Warning! Liquidity depth is thin on JSWSTEEL.NS, risking slippage."
-      ],
-      "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
-    },
-    {
       "symbol": "KOTAKBANK.NS",
       "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
       "historical_lessons_applied": [
@@ -211,10 +196,10 @@
       "arguments": [
         "Bullish Agent Group A: Trend structure on NESTLEIND.NS confirms institutional accumulation.",
         "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
-        "Bearish Agent Group X: Warning! Liquidity depth is thin on NESTLEIND.NS, risking slippage."
+        "Bearish Agent Group X: Order book depth is stable, but overhead resistance must be watched."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "70%"
     },
     {
       "symbol": "SHRIRAMFIN.NS",
@@ -230,21 +215,6 @@
       ],
       "consensus_reached": "APPROVED",
       "final_debate_score": "68%"
-    },
-    {
-      "symbol": "SBIN.NS",
-      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
-      "historical_lessons_applied": [
-        "Avoid low volume breakouts during high market VIX.",
-        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
-      ],
-      "arguments": [
-        "Bullish Agent Group A: Trend structure on SBIN.NS confirms institutional accumulation.",
-        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
-        "Bearish Agent Group X: Warning! Liquidity depth is thin on SBIN.NS, risking slippage."
-      ],
-      "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
     },
     {
       "symbol": "SUNPHARMA.NS",
@@ -319,7 +289,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on WIPRO.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "70%"
     }
   ]
 }
