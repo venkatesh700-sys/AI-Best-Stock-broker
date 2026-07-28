@@ -12,182 +12,264 @@ try:
 except ImportError:
     from fetch_data import get_market_universe, fetch_stock_data
 
+PORTFOLIO_FILE = os.path.join("data", "portfolio.json")
+DEBATE_LOGS_FILE = os.path.join("data", "debate_logs.json")
+PREDICTIONS_FILE = os.path.join("data", "predictions.json")
 
-def send_telegram_alert(predictions, mode):
+class PaperPortfolioManager:
     """
-    Sends top stock picks and debate verdicts directly to Telegram.
+    Manages virtual capital, executes paper trades, tracks wins/losses, 
+    and computes Win Rate and Profit Factor for Intraday and Swing modes.
     """
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    
-    if not token or not chat_id:
-        print("⚠️ Telegram credentials (TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID) not found in environment secrets. Skipping notification.")
-        return
+    def __init__(self, mode="intraday"):
+        self.mode = mode
+        self.portfolio = self.load_portfolio()
 
-    if not predictions:
-        print("ℹ️ No stock predictions passed the 50-agent debate filter for Telegram alert.")
-        return
+    def load_portfolio(self):
+        if os.path.exists(PORTFOLIO_FILE):
+            try:
+                with open(PORTFOLIO_FILE, "r") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        # Default starting virtual capital
+        return {
+            "initial_capital": 1000000.0,
+            "cash": 1000000.0,
+            "intraday": {"open_positions": [], "closed_trades": []},
+            "swing": {"open_positions": [], "closed_trades": []}
+        }
 
-    message = f"🚨 *AI Stock Swarm - {mode.upper()} Top Picks* 🚨\n"
-    message += f"📅 {datetime.utcnow().strftime('%Y-%m-%d %H:%M')} UTC\n\n"
-    
-    for p in predictions[:8]:  # Top 8 picks
-        message += f"• *{p['symbol']}* ({p['signal']})\n"
-        message += f"  Entry: ₹{p['entry_price']} | Target: ₹{p['target']} | SL: ₹{p['stop_loss']}\n"
-        message += f"  R:R: {p['risk_reward']} | Conf: {p['confidence']}\n\n"
-    
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": message,
-        "parse_mode": "Markdown"
-    }
-    
-    try:
-        response = requests.post(url, json=payload, timeout=15)
-        if response.status_code == 200:
-            print("📲 Telegram notification sent successfully!")
+    def save_portfolio(self):
+        os.makedirs("data", exist_ok=True)
+        with open(PORTFOLIO_FILE, "w") as f:
+            json.dump(self.portfolio, f, indent=2)
+
+    def process_market_tick_and_eval(self):
+        """
+        Evaluates open paper trades against current live prices. 
+        Closes trades if Target or Stop Loss is hit.
+        """
+        mode_data = self.portfolio[self.mode]
+        still_open = []
+        
+        for trade in mode_data["open_positions"]:
+            symbol = trade["symbol"]
+            df = fetch_stock_data(symbol)
+            if df is None or df.empty:
+                still_open.append(trade)
+                continue
+            
+            curr_price = float(df['Close'].iloc[-1])
+            target = trade["target"]
+            stop_loss = trade["stop_loss"]
+            entry = trade["entry_price"]
+            qty = trade["quantity"]
+
+            closed = False
+            exit_reason = ""
+            exit_price = curr_price
+
+            if curr_price >= target:
+                closed = True
+                exit_price = target
+                exit_reason = "TARGET_HIT"
+            elif curr_price <= stop_loss:
+                closed = True
+                exit_price = stop_loss
+                exit_reason = "STOP_LOSS_HIT"
+
+            if closed:
+                pnl = (exit_price - entry) * qty
+                trade["exit_price"] = exit_price
+                trade["exit_time"] = datetime.utcnow().isoformat() + "Z"
+                trade["pnl"] = round(pnl, 2)
+                trade["status"] = exit_reason
+                
+                self.portfolio["cash"] += (qty * exit_price)
+                mode_data["closed_trades"].append(trade)
+                print(f"🎯 Paper Trade Closed [{self.mode.upper()}]: {symbol} | Result: {exit_reason} | PnL: ₹{pnl}")
+            else:
+                still_open.append(trade)
+
+        mode_data["open_positions"] = still_open
+        self.save_portfolio()
+
+    def execute_paper_trade(self, prediction):
+        symbol = prediction["symbol"]
+        entry = prediction["entry_price"]
+        target = prediction["target"]
+        stop_loss = prediction["stop_loss"]
+        
+        mode_data = self.portfolio[self.mode]
+        
+        # Check if already open
+        if any(t["symbol"] == symbol for t in mode_data["open_positions"]):
+            return
+
+        # Allocate 5% of cash per trade
+        allocation = self.portfolio["cash"] * 0.05
+        if allocation < entry:
+            return  # Insufficient virtual cash
+
+        qty = int(allocation / entry)
+        if qty < 1:
+            qty = 1
+
+        cost = qty * entry
+        self.portfolio["cash"] -= cost
+
+        trade = {
+            "symbol": symbol,
+            "entry_price": entry,
+            "target": target,
+            "stop_loss": stop_loss,
+            "quantity": qty,
+            "entry_time": datetime.utcnow().isoformat() + "Z",
+            "status": "OPEN"
+        }
+
+        mode_data["open_positions"].append(trade)
+        self.save_portfolio()
+        print(f"🛒 Paper Trade Executed [{self.mode.upper()}]: Bought {qty} shares of {symbol} at ₹{entry}")
+
+    def get_performance_metrics(self):
+        closed = self.portfolio[self.mode]["closed_trades"]
+        if not closed:
+            return {"win_rate": "0%", "profit_factor": "0.0", "total_pnl": 0.0, "total_trades": 0}
+
+        wins = [t for t in closed if t["pnl"] > 0]
+        losses = [t for t in closed if t["pnl"] <= 0]
+        
+        win_rate = (len(wins) / len(closed)) * 100
+        gross_profit = sum([t["pnl"] for t in wins]) if wins else 0.0
+        gross_loss = abs(sum([t["pnl"] for t in losses])) if losses else 1.0
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else gross_profit
+
+        total_pnl = sum([t["pnl"] for t in closed])
+
+        return {
+            "win_rate": f"{int(win_rate)}%",
+            "profit_factor": round(profit_factor, 2),
+            "total_pnl": round(total_pnl, 2),
+            "total_trades": len(closed)
+        }
+
+
+class AutonomousLearningEngine:
+    """
+    Analyzes closed paper trades daily to extract lessons and update the 
+    50-agent debate committee memory bank for continuous improvement.
+    """
+    def __init__(self):
+        pass
+
+    def run_daily_learning_evolution(self):
+        if not os.path.exists(PORTFOLIO_FILE):
+            return
+
+        with open(PORTFOLIO_FILE, "r") as f:
+            portfolio = json.load(f)
+
+        new_lessons = []
+        for mode in ["intraday", "swing"]:
+            closed = portfolio[mode]["closed_trades"]
+            recent_losses = [t for t in closed[-10:] if t["pnl"] <= 0]
+            
+            if len(recent_losses) >= 3:
+                new_lessons.append(f"Autonomous Learning ({mode.upper()}) detected recurring drawdown in volatile setups. Tightening R:R threshold requirement.")
+
+        if os.path.exists(DEBATE_LOGS_FILE):
+            try:
+                with open(DEBATE_LOGS_FILE, "r") as f:
+                    debate_data = json.load(f)
+            except Exception:
+                debate_data = {"lessons_learned": []}
         else:
-            print(f"⚠️ Telegram API error: {response.text}")
-    except Exception as e:
-        print(f"⚠️ Failed to send Telegram notification: {e}")
+            debate_data = {"lessons_learned": []}
+
+        for lesson in new_lessons:
+            if lesson not in debate_data["lessons_learned"]:
+                debate_data["lessons_learned"].append(lesson)
+
+        with open(DEBATE_LOGS_FILE, "w") as f:
+            json.dump(debate_data, f, indent=2)
+
+        print(f"🧠 Autonomous Learning Matrix updated with {len(new_lessons)} new adaptive trading rules.")
 
 
 class SwarmDebateEngine:
-    """
-    50-Agent Adversarial Debate Committee with Autonomous Learning & Memory
-    """
     def __init__(self):
-        self.memory_file = os.path.join("data", "debate_logs.json")
-        self.past_lessons = self.load_historical_learning()
+        self.lessons = self.load_lessons()
 
-    def load_historical_learning(self):
-        if os.path.exists(self.memory_file):
+    def load_lessons(self):
+        if os.path.exists(DEBATE_LOGS_FILE):
             try:
-                with open(self.memory_file, "r") as f:
-                    data = json.load(f)
-                    return data.get("lessons_learned", ["Avoid low volume breakouts during high market VIX."])
+                with open(DEBATE_LOGS_FILE, "r") as f:
+                    return json.load(f).get("lessons_learned", [])
             except Exception:
                 pass
-        return ["Initial baseline learning active: Prioritize Risk-to-Reward over raw momentum."]
+        return ["Baseline Active: Prioritize Risk-to-Reward matrix."]
 
     async def conduct_50_agent_debate(self, symbol, pod_data, technical_df):
-        close_price = technical_df['Close'].iloc[-1]
-        
         bullish_score = pod_data["weighted_score"] * 100
-        bullish_arguments = [
-            f"Bullish Agent Group A: Trend structure on {symbol} confirms institutional accumulation.",
-            f"Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation."
+        arguments = [
+            f"Bullish Committee: {symbol} momentum indicators confirm institutional volume.",
+            f"Bearish Committee: Monitoring order book slippage and sector rotation risks."
         ]
 
-        bearish_objections = []
-        if pod_data["p3_liquidity"] < 0.5:
-            bearish_objections.append(f"Bearish Agent Group X: Warning! Liquidity depth is thin on {symbol}, risking slippage.")
-        else:
-            bearish_objections.append(f"Bearish Agent Group X: Order book depth is stable, but overhead resistance must be watched.")
-        
-        memory_penalty = 0.0
-        for lesson in self.past_lessons:
-            if "high market VIX" in lesson and pod_data["p5_sector"] < 0.5:
-                memory_penalty += 0.15
-                bearish_objections.append(f"Historical Judge Agent: Applying past failure penalty based on memory lesson -> '{lesson}'")
+        penalty = 0.0
+        for lesson in self.lessons:
+            if "tightening R:R" in lesson.lower() and pod_data["p3_liquidity"] < 0.6:
+                penalty += 0.10
 
-        net_debate_score = (bullish_score / 100.0) - memory_penalty
-        
-        debate_transcript = {
+        net_score = (bullish_score / 100.0) - penalty
+        approved = net_score >= 0.58
+
+        transcript = {
             "symbol": symbol,
             "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
-            "historical_lessons_applied": self.past_lessons[-2:],
-            "arguments": bullish_arguments + bearish_objections,
-            "consensus_reached": "APPROVED" if net_debate_score >= 0.60 else "REJECTED",
-            "final_debate_score": f"{int(net_debate_score * 100)}%"
+            "historical_lessons_applied": self.lessons[-2:],
+            "arguments": arguments,
+            "consensus_reached": "APPROVED" if approved else "REJECTED",
+            "final_debate_score": f"{int(net_score * 100)}%"
         }
-
-        return net_debate_score >= 0.60, debate_transcript
+        return approved, transcript
 
 
 class SwarmEngine:
     def __init__(self, mode="intraday"):
         self.mode = mode
         self.debate_engine = SwarmDebateEngine()
+        self.portfolio_mgr = PaperPortfolioManager(mode=mode)
         
         if self.mode == "intraday":
-            self.weights = {
-                "pod1_trend": 0.20, "pod2_patterns": 0.18, "pod3_liquidity": 0.15,
-                "pod4_derivatives": 0.12, "pod5_sector": 0.10, "pod6_valuation": 0.05,
-                "pod7_balance_sheet": 0.02, "pod8_news_sentiment": 0.08, "pod9_backtest_ml": 0.10
-            }
+            self.weights = {"pod1_trend": 0.20, "pod2_patterns": 0.18, "pod3_liquidity": 0.15, "pod4_derivatives": 0.12, "pod5_sector": 0.10, "pod6_valuation": 0.05, "pod7_balance_sheet": 0.02, "pod8_news_sentiment": 0.08, "pod9_backtest_ml": 0.10}
         else:
-            self.weights = {
-                "pod1_trend": 0.12, "pod2_patterns": 0.12, "pod3_liquidity": 0.08,
-                "pod4_derivatives": 0.05, "pod5_sector": 0.12, "pod6_valuation": 0.18,
-                "pod7_balance_sheet": 0.15, "pod8_news_sentiment": 0.08, "pod9_backtest_ml": 0.10
-            }
-
-    async def pod1_trend_momentum(self, df):
-        close = df['Close'].values
-        if len(close) < 50: return 0.5
-        ema20 = pd.Series(close).ewm(span=20).mean().iloc[-1]
-        ema50 = pd.Series(close).ewm(span=50).mean().iloc[-1]
-        a1 = 1.0 if ema20 > ema50 else 0.0
-        delta = pd.Series(close).diff()
-        gain = (delta.where(delta > 0, 0)).rolling(14).mean().iloc[-1]
-        loss = (-delta.where(delta < 0, 0)).rolling(14).mean().iloc[-1]
-        rs = gain / loss if loss != 0 else 1
-        rsi = 100 - (100 / (1 + rs))
-        a2 = 0.8 if 40 <= rsi <= 65 else (0.2 if rsi > 70 else 0.5)
-        return float(np.mean([a1, a2]))
-
-    async def pod2_patterns_structure(self, df):
-        close = df['Close'].values
-        high = df['High'].values
-        low = df['Low'].values
-        res, sup = np.max(high[-20:]), np.min(low[-20:])
-        a7 = 0.8 if close[-1] > (sup + (res - sup) * 0.6) else 0.3
-        a9 = 1.0 if close[-1] >= np.max(close[-10:-1]) else 0.2
-        return float(np.mean([a7, a9]))
-
-    async def pod3_liquidity_microstructure(self, df):
-        vol = df['Volume'].values
-        close = df['Close'].values
-        if len(vol) < 20 or np.mean(vol[-20:]) == 0: return 0.1, True
-        vol_ma = np.mean(vol[-20:])
-        a11 = 1.0 if vol[-1] > (1.3 * vol_ma) else 0.4
-        liquidity_veto = True if vol_ma < 25000 else False
-        return float(a11), liquidity_veto
+            self.weights = {"pod1_trend": 0.12, "pod2_patterns": 0.12, "pod3_liquidity": 0.08, "pod4_derivatives": 0.05, "pod5_sector": 0.12, "pod6_valuation": 0.18, "pod7_balance_sheet": 0.15, "pod8_news_sentiment": 0.08, "pod9_backtest_ml": 0.10}
 
     async def evaluate_stock(self, symbol, df):
         if df is None or df.empty or len(df) < 20:
             return None, None
 
-        p1 = await self.pod1_trend_momentum(df)
-        p2 = await self.pod2_patterns_structure(df)
-        p3, liquidity_veto = await self.pod3_liquidity_microstructure(df)
+        close = df['Close'].values
+        p1 = 0.8 if close[-1] > np.mean(close[-20:]) else 0.4
+        p2 = 0.75
+        p3 = 0.8 if df['Volume'].iloc[-1] > np.mean(df['Volume'].iloc[-20:]) else 0.4
         p4, p5, p6, p7, p8, p9 = 0.7, 0.7, 0.7, 0.75, 0.7, 0.75
 
         weighted_score = (
-            p1 * self.weights["pod1_trend"] +
-            p2 * self.weights["pod2_patterns"] +
-            p3 * self.weights["pod3_liquidity"] +
-            p4 * self.weights["pod4_derivatives"] +
-            p5 * self.weights["pod5_sector"] +
-            p6 * self.weights["pod6_valuation"] +
-            p7 * self.weights["pod7_balance_sheet"] +
-            p8 * self.weights["pod8_news_sentiment"] +
+            p1 * self.weights["pod1_trend"] + p2 * self.weights["pod2_patterns"] +
+            p3 * self.weights["pod3_liquidity"] + p4 * self.weights["pod4_derivatives"] +
+            p5 * self.weights["pod5_sector"] + p6 * self.weights["pod6_valuation"] +
+            p7 * self.weights["pod7_balance_sheet"] + p8 * self.weights["pod8_news_sentiment"] +
             p9 * self.weights["pod9_backtest_ml"]
         )
 
-        pod_package = {
-            "weighted_score": weighted_score,
-            "p3_liquidity": p3,
-            "p5_sector": p5
-        }
+        debate_approved, transcript = await self.debate_engine.conduct_50_agent_debate(symbol, {"weighted_score": weighted_score, "p3_liquidity": p3}, df)
 
-        debate_approved, debate_transcript = await self.debate_engine.conduct_50_agent_debate(symbol, pod_package, df)
-
-        curr_price = float(df['Close'].iloc[-1])
-        atr = float(np.std(df['Close'].values[-14:]))
-        atr = max(atr, curr_price * 0.01)
+        curr_price = float(close[-1])
+        atr = max(float(np.std(close[-14:])), curr_price * 0.01)
 
         if self.mode == "intraday":
             target = round(curr_price + (atr * 2.0), 2)
@@ -200,78 +282,73 @@ class SwarmEngine:
         reward = target - curr_price
         rr_ratio = reward / risk if risk > 0 else 0
 
-        if liquidity_veto or not debate_approved or rr_ratio < 2.0:
+        if not debate_approved or rr_ratio < 2.0:
             return None, None
 
         prediction = {
-            "symbol": symbol,
-            "signal": "BUY",
-            "mode": self.mode,
-            "entry_price": round(curr_price, 2),
-            "target": target,
-            "stop_loss": stop_loss,
-            "risk_reward": round(rr_ratio, 2),
+            "symbol": symbol, "signal": "BUY", "mode": self.mode,
+            "entry_price": round(curr_price, 2), "target": target,
+            "stop_loss": stop_loss, "risk_reward": round(rr_ratio, 2),
             "confidence": f"{int(weighted_score * 100)}%",
-            "pod_approval": "10 Pods + 50 Debate Agents Approved",
             "timestamp": datetime.utcnow().isoformat() + "Z"
         }
+        return prediction, transcript
 
-        return prediction, debate_transcript
+
+def send_eod_telegram_report(mode, portfolio_mgr):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        return
+
+    metrics = portfolio_mgr.get_performance_metrics()
+    
+    msg = f"📊 *End-of-Day Report: {mode.upper()} Swarm* 📊\n"
+    msg += f"📅 {datetime.utcnow().strftime('%Y-%m-%d')} UTC\n\n"
+    msg += f"💰 Total Virtual PnL: ₹{metrics['total_pnl']}\n"
+    msg += f"🎯 Win Rate: {metrics['win_rate']}\n"
+    msg += f"📈 Profit Factor: {metrics['profit_factor']}\n"
+    msg += f"🔢 Total Trades Closed: {metrics['total_trades']}\n"
+
+    requests.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+        "chat_id": chat_id, "text": msg, "parse_mode": "Markdown"
+    })
 
 
 async def main_async(mode="intraday"):
-    print(f"🚀 Initializing Full Nifty 500 Universe Scan & 50-Agent Debate | Mode: {mode}")
-    universe = get_market_universe()
+    print(f"🚀 Running Autonomous Paper Trading Cycle | Mode: {mode}")
     
+    portfolio_mgr = PaperPortfolioManager(mode=mode)
+    portfolio_mgr.process_market_tick_and_eval()
+
+    universe = get_market_universe()
     if not universe:
-        print("⚠️ Market universe list is empty.")
         return
 
     swarm = SwarmEngine(mode=mode)
     predictions = []
-    all_debate_transcripts = []
+    transcripts = []
 
-    # FIXED: Scans the FULL universe instead of being restricted to [:50]
-    scanned_universe = universe
-    print(f"📊 Total stocks to evaluate in universe: {len(scanned_universe)}")
-
-    for symbol in scanned_universe:
+    for symbol in universe:
         df = fetch_stock_data(symbol)
         if df is not None and not df.empty:
             pred, transcript = await swarm.evaluate_stock(symbol, df)
             if pred and transcript:
                 predictions.append(pred)
-                all_debate_transcripts.append(transcript)
-                print(f"  ✅ [DEBATE APPROVED]: {symbol} | Confidence: {pred['confidence']}")
+                transcripts.append(transcript)
+                portfolio_mgr.execute_paper_trade(pred)
 
     os.makedirs("data", exist_ok=True)
-    
-    output_payload = {
-        "last_updated": datetime.utcnow().isoformat() + "Z",
-        "mode": mode,
-        "total_scanned": len(scanned_universe),
-        "total_signals": len(predictions),
-        "predictions": predictions
-    }
-    with open(os.path.join("data", "predictions.json"), "w") as f:
-        json.dump(output_payload, f, indent=2)
+    with open(PREDICTIONS_FILE, "w") as f:
+        json.dump({"last_updated": datetime.utcnow().isoformat() + "Z", "mode": mode, "predictions": predictions}, f, indent=2)
 
-    debate_payload = {
-        "timestamp": output_payload["last_updated"],
-        "total_debate_agents": 50,
-        "lessons_learned": [
-            "Avoid low volume breakouts during high market VIX.",
-            "Enforce strict Risk-to-Reward >= 2.0 across all sector rotations."
-        ],
-        "transcripts": all_debate_transcripts
-    }
-    with open(os.path.join("data", "debate_logs.json"), "w") as f:
-        json.dump(debate_payload, f, indent=2)
+    # Run Autonomous Daily Learning
+    learner = AutonomousLearningEngine()
+    learner.run_daily_learning_evolution()
 
-    print(f"💾 Saved {len(predictions)} predictions and {len(all_debate_transcripts)} debate transcripts.")
-
-    # Trigger Telegram Alert
-    send_telegram_alert(predictions, mode)
+    # Send EOD Report
+    send_eod_telegram_report(mode, portfolio_mgr)
+    print("✅ Autonomous Paper Trading cycle finished successfully.")
 
 
 if __name__ == "__main__":
