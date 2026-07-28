@@ -5,11 +5,52 @@ import os
 from datetime import datetime
 import numpy as np
 import pandas as pd
+import requests
 
 try:
     from engine.fetch_data import get_market_universe, fetch_stock_data
 except ImportError:
     from fetch_data import get_market_universe, fetch_stock_data
+
+
+def send_telegram_alert(predictions, mode):
+    """
+    Sends top stock picks and debate verdicts directly to Telegram.
+    """
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    
+    if not token or not chat_id:
+        print("⚠️ Telegram credentials (TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID) not found in environment secrets. Skipping notification.")
+        return
+
+    if not predictions:
+        print("ℹ️ No stock predictions passed the 50-agent debate filter for Telegram alert.")
+        return
+
+    message = f"🚨 *AI Stock Swarm - {mode.upper()} Top Picks* 🚨\n"
+    message += f"📅 {datetime.utcnow().strftime('%Y-%m-%d %H:%M')} UTC\n\n"
+    
+    for p in predictions[:8]:  # Top 8 picks
+        message += f"• *{p['symbol']}* ({p['signal']})\n"
+        message += f"  Entry: ₹{p['entry_price']} | Target: ₹{p['target']} | SL: ₹{p['stop_loss']}\n"
+        message += f"  R:R: {p['risk_reward']} | Conf: {p['confidence']}\n\n"
+    
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": message,
+        "parse_mode": "Markdown"
+    }
+    
+    try:
+        response = requests.post(url, json=payload, timeout=15)
+        if response.status_code == 200:
+            print("📲 Telegram notification sent successfully!")
+        else:
+            print(f"⚠️ Telegram API error: {response.text}")
+    except Exception as e:
+        print(f"⚠️ Failed to send Telegram notification: {e}")
 
 
 class SwarmDebateEngine:
@@ -21,50 +62,36 @@ class SwarmDebateEngine:
         self.past_lessons = self.load_historical_learning()
 
     def load_historical_learning(self):
-        """
-        Loads past debate logs and extracts failure patterns to implement 
-        autonomous learning and experience-based improvement.
-        """
         if os.path.exists(self.memory_file):
             try:
                 with open(self.memory_file, "r") as f:
                     data = json.load(f)
-                    # Extract historical lessons if available
                     return data.get("lessons_learned", ["Avoid low volume breakouts during high market VIX."])
             except Exception:
                 pass
         return ["Initial baseline learning active: Prioritize Risk-to-Reward over raw momentum."]
 
     async def conduct_50_agent_debate(self, symbol, pod_data, technical_df):
-        """
-        Simulates 50 specialized debate agents arguing over the stock candidate 
-        using pod findings and historical memory lessons.
-        """
         close_price = technical_df['Close'].iloc[-1]
         
-        # Sub-committees among the 50 debate agents
-        # Team 1: 20 Bullish Prosecutors
         bullish_score = pod_data["weighted_score"] * 100
         bullish_arguments = [
             f"Bullish Agent Group A: Trend structure on {symbol} confirms institutional accumulation.",
             f"Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation."
         ]
 
-        # Team 2: 20 Bearish Skeptics (Trap & Risk Detectors)
         bearish_objections = []
         if pod_data["p3_liquidity"] < 0.5:
             bearish_objections.append(f"Bearish Agent Group X: Warning! Liquidity depth is thin on {symbol}, risking slippage.")
         else:
             bearish_objections.append(f"Bearish Agent Group X: Order book depth is stable, but overhead resistance must be watched.")
         
-        # Apply Autonomous Memory Learning Penalties
         memory_penalty = 0.0
         for lesson in self.past_lessons:
             if "high market VIX" in lesson and pod_data["p5_sector"] < 0.5:
                 memory_penalty += 0.15
                 bearish_objections.append(f"Historical Judge Agent: Applying past failure penalty based on memory lesson -> '{lesson}'")
 
-        # Team 3: 10 Chief Arbitrators & Historical Judges
         net_debate_score = (bullish_score / 100.0) - memory_penalty
         
         debate_transcript = {
@@ -72,11 +99,11 @@ class SwarmDebateEngine:
             "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
             "historical_lessons_applied": self.past_lessons[-2:],
             "arguments": bullish_arguments + bearish_objections,
-            "consensus_reached": "APPROVED" if net_debate_score >= 0.65 else "REJECTED",
+            "consensus_reached": "APPROVED" if net_debate_score >= 0.60 else "REJECTED",
             "final_debate_score": f"{int(net_debate_score * 100)}%"
         }
 
-        return net_debate_score >= 0.65, debate_transcript
+        return net_debate_score >= 0.60, debate_transcript
 
 
 class SwarmEngine:
@@ -125,8 +152,8 @@ class SwarmEngine:
         close = df['Close'].values
         if len(vol) < 20 or np.mean(vol[-20:]) == 0: return 0.1, True
         vol_ma = np.mean(vol[-20:])
-        a11 = 1.0 if vol[-1] > (1.5 * vol_ma) else 0.4
-        liquidity_veto = True if vol_ma < 50000 else False
+        a11 = 1.0 if vol[-1] > (1.3 * vol_ma) else 0.4
+        liquidity_veto = True if vol_ma < 25000 else False
         return float(a11), liquidity_veto
 
     async def evaluate_stock(self, symbol, df):
@@ -156,7 +183,6 @@ class SwarmEngine:
             "p5_sector": p5
         }
 
-        # --- STAGE 2: 50-AGENT ADVERSARIAL DEBATE & LEARNING ---
         debate_approved, debate_transcript = await self.debate_engine.conduct_50_agent_debate(symbol, pod_package, df)
 
         curr_price = float(df['Close'].iloc[-1])
@@ -164,17 +190,17 @@ class SwarmEngine:
         atr = max(atr, curr_price * 0.01)
 
         if self.mode == "intraday":
-            target = round(curr_price + (atr * 2.2), 2)
-            stop_loss = round(curr_price - (atr * 0.9), 2)
+            target = round(curr_price + (atr * 2.0), 2)
+            stop_loss = round(curr_price - (atr * 0.8), 2)
         else:
-            target = round(curr_price + (atr * 4.5), 2)
-            stop_loss = round(curr_price - (atr * 1.5), 2)
+            target = round(curr_price + (atr * 4.0), 2)
+            stop_loss = round(curr_price - (atr * 1.4), 2)
 
         risk = curr_price - stop_loss
         reward = target - curr_price
         rr_ratio = reward / risk if risk > 0 else 0
 
-        if liquidity_veto or not debate_approved or rr_ratio < 2.2:
+        if liquidity_veto or not debate_approved or rr_ratio < 2.0:
             return None, None
 
         prediction = {
@@ -194,17 +220,20 @@ class SwarmEngine:
 
 
 async def main_async(mode="intraday"):
-    print(f"🚀 Initializing 10-Pod Analysis & 50-Agent Debate Engine | Mode: {mode}")
+    print(f"🚀 Initializing Full Nifty 500 Universe Scan & 50-Agent Debate | Mode: {mode}")
     universe = get_market_universe()
     
     if not universe:
+        print("⚠️ Market universe list is empty.")
         return
 
     swarm = SwarmEngine(mode=mode)
     predictions = []
     all_debate_transcripts = []
 
-    scanned_universe = universe[:50]  # Scans top liquid universe for speed & depth
+    # FIXED: Scans the FULL universe instead of being restricted to [:50]
+    scanned_universe = universe
+    print(f"📊 Total stocks to evaluate in universe: {len(scanned_universe)}")
 
     for symbol in scanned_universe:
         df = fetch_stock_data(symbol)
@@ -217,7 +246,6 @@ async def main_async(mode="intraday"):
 
     os.makedirs("data", exist_ok=True)
     
-    # Save Predictions
     output_payload = {
         "last_updated": datetime.utcnow().isoformat() + "Z",
         "mode": mode,
@@ -228,20 +256,22 @@ async def main_async(mode="intraday"):
     with open(os.path.join("data", "predictions.json"), "w") as f:
         json.dump(output_payload, f, indent=2)
 
-    # Save Debate Logs & Learned Experience
     debate_payload = {
         "timestamp": output_payload["last_updated"],
         "total_debate_agents": 50,
         "lessons_learned": [
             "Avoid low volume breakouts during high market VIX.",
-            "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+            "Enforce strict Risk-to-Reward >= 2.0 across all sector rotations."
         ],
         "transcripts": all_debate_transcripts
     }
     with open(os.path.join("data", "debate_logs.json"), "w") as f:
         json.dump(debate_payload, f, indent=2)
 
-    print(f"💾 50-Agent debate transcripts and learning memory saved successfully.")
+    print(f"💾 Saved {len(predictions)} predictions and {len(all_debate_transcripts)} debate transcripts.")
+
+    # Trigger Telegram Alert
+    send_telegram_alert(predictions, mode)
 
 
 if __name__ == "__main__":
