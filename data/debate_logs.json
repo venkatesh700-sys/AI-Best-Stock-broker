@@ -1,11 +1,41 @@
 {
-  "timestamp": "2026-07-28T06:29:15.824754Z",
+  "timestamp": "2026-07-28T06:36:19.984605Z",
   "total_debate_agents": 50,
   "lessons_learned": [
     "Avoid low volume breakouts during high market VIX.",
-    "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+    "Enforce strict Risk-to-Reward >= 2.0 across all sector rotations."
   ],
   "transcripts": [
+    {
+      "symbol": "ADANIPORTS.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on ADANIPORTS.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on ADANIPORTS.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "62%"
+    },
+    {
+      "symbol": "ASIANPAINT.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on ASIANPAINT.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on ASIANPAINT.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "65%"
+    },
     {
       "symbol": "AXISBANK.NS",
       "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
@@ -19,7 +49,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on AXISBANK.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "68%"
     },
     {
       "symbol": "BAJFINANCE.NS",
@@ -34,7 +64,22 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on BAJFINANCE.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "73%"
+      "final_debate_score": "68%"
+    },
+    {
+      "symbol": "BAJAJFINSV.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on BAJAJFINSV.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on BAJAJFINSV.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "65%"
     },
     {
       "symbol": "CIPLA.NS",
@@ -82,6 +127,21 @@
       "final_debate_score": "65%"
     },
     {
+      "symbol": "HDFCBANK.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on HDFCBANK.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on HDFCBANK.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "67%"
+    },
+    {
       "symbol": "HDFCLIFE.NS",
       "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
       "historical_lessons_applied": [
@@ -92,6 +152,21 @@
         "Bullish Agent Group A: Trend structure on HDFCLIFE.NS confirms institutional accumulation.",
         "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
         "Bearish Agent Group X: Warning! Liquidity depth is thin on HDFCLIFE.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "65%"
+    },
+    {
+      "symbol": "INDIGO.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on INDIGO.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on INDIGO.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
       "final_debate_score": "65%"
@@ -109,7 +184,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on INFY.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "70%"
     },
     {
       "symbol": "JIOFIN.NS",
@@ -136,10 +211,10 @@
       "arguments": [
         "Bullish Agent Group A: Trend structure on JSWSTEEL.NS confirms institutional accumulation.",
         "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
-        "Bearish Agent Group X: Order book depth is stable, but overhead resistance must be watched."
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on JSWSTEEL.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "68%"
+      "final_debate_score": "65%"
     },
     {
       "symbol": "KOTAKBANK.NS",
@@ -169,7 +244,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on LT.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "68%"
     },
     {
       "symbol": "M&M.NS",
@@ -184,7 +259,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on M&M.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "70%"
     },
     {
       "symbol": "MAXHEALTH.NS",
@@ -199,7 +274,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on MAXHEALTH.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "65%"
+      "final_debate_score": "64%"
     },
     {
       "symbol": "NESTLEIND.NS",
@@ -211,10 +286,40 @@
       "arguments": [
         "Bullish Agent Group A: Trend structure on NESTLEIND.NS confirms institutional accumulation.",
         "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
-        "Bearish Agent Group X: Order book depth is stable, but overhead resistance must be watched."
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on NESTLEIND.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "70%"
+      "final_debate_score": "65%"
+    },
+    {
+      "symbol": "POWERGRID.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on POWERGRID.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on POWERGRID.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "62%"
+    },
+    {
+      "symbol": "SBILIFE.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on SBILIFE.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on SBILIFE.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "68%"
     },
     {
       "symbol": "SHRIRAMFIN.NS",
@@ -229,7 +334,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on SHRIRAMFIN.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "68%"
+      "final_debate_score": "67%"
     },
     {
       "symbol": "SBIN.NS",
@@ -277,6 +382,21 @@
       "final_debate_score": "70%"
     },
     {
+      "symbol": "TMPV.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on TMPV.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on TMPV.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "62%"
+    },
+    {
       "symbol": "TATASTEEL.NS",
       "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
       "historical_lessons_applied": [
@@ -307,6 +427,21 @@
       "final_debate_score": "65%"
     },
     {
+      "symbol": "TITAN.NS",
+      "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
+      "historical_lessons_applied": [
+        "Avoid low volume breakouts during high market VIX.",
+        "Enforce strict Risk-to-Reward >= 2.2 across all sector rotations."
+      ],
+      "arguments": [
+        "Bullish Agent Group A: Trend structure on TITAN.NS confirms institutional accumulation.",
+        "Bullish Agent Group B: Price action relative to VWAP supports an immediate upside continuation.",
+        "Bearish Agent Group X: Warning! Liquidity depth is thin on TITAN.NS, risking slippage."
+      ],
+      "consensus_reached": "APPROVED",
+      "final_debate_score": "65%"
+    },
+    {
       "symbol": "WIPRO.NS",
       "participants": "50 Specialized Debate Agents (20 Bulls, 20 Bears, 10 Judges)",
       "historical_lessons_applied": [
@@ -319,7 +454,7 @@
         "Bearish Agent Group X: Warning! Liquidity depth is thin on WIPRO.NS, risking slippage."
       ],
       "consensus_reached": "APPROVED",
-      "final_debate_score": "70%"
+      "final_debate_score": "65%"
     }
   ]
 }
