@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-07-28T06:28:24.657300Z",
+  "last_updated": "2026-07-28T06:29:15.824754Z",
   "mode": "swing_search",
   "total_scanned": 50,
-  "total_signals": 19,
+  "total_signals": 21,
   "predictions": [
     {
       "symbol": "AXISBANK.NS",
@@ -14,31 +14,31 @@
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:20.251327Z"
+      "timestamp": "2026-07-28T06:29:07.746261Z"
     },
     {
       "symbol": "BAJFINANCE.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1048.9,
-      "target": 1096.1,
-      "stop_loss": 1033.17,
+      "entry_price": 1049.5,
+      "target": 1096.73,
+      "stop_loss": 1033.76,
       "risk_reward": 3.0,
       "confidence": "73%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:20.433329Z"
+      "timestamp": "2026-07-28T06:29:08.091480Z"
     },
     {
       "symbol": "CIPLA.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1435.7,
-      "target": 1500.31,
-      "stop_loss": 1414.16,
+      "entry_price": 1435.8,
+      "target": 1500.41,
+      "stop_loss": 1414.26,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:20.803183Z"
+      "timestamp": "2026-07-28T06:29:08.911483Z"
     },
     {
       "symbol": "ETERNAL.NS",
@@ -50,115 +50,127 @@
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:21.166405Z"
+      "timestamp": "2026-07-28T06:29:09.734827Z"
     },
     {
       "symbol": "HCLTECH.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1337.9,
-      "target": 1413.07,
-      "stop_loss": 1312.84,
+      "entry_price": 1338.0,
+      "target": 1413.19,
+      "stop_loss": 1312.94,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:21.363941Z"
+      "timestamp": "2026-07-28T06:29:10.244211Z"
     },
     {
       "symbol": "HDFCLIFE.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 554.85,
-      "target": 579.82,
-      "stop_loss": 546.53,
+      "entry_price": 554.9,
+      "target": 579.87,
+      "stop_loss": 546.58,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:21.552403Z"
+      "timestamp": "2026-07-28T06:29:10.674685Z"
     },
     {
       "symbol": "INFY.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1113.8,
-      "target": 1170.74,
-      "stop_loss": 1094.82,
+      "entry_price": 1112.5,
+      "target": 1169.1,
+      "stop_loss": 1093.63,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.025021Z"
+      "timestamp": "2026-07-28T06:29:11.552612Z"
     },
     {
       "symbol": "JIOFIN.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 237.33,
-      "target": 248.01,
-      "stop_loss": 233.77,
+      "entry_price": 237.37,
+      "target": 248.05,
+      "stop_loss": 233.81,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.233039Z"
+      "timestamp": "2026-07-28T06:29:12.001005Z"
+    },
+    {
+      "symbol": "JSWSTEEL.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1249.4,
+      "target": 1305.62,
+      "stop_loss": 1230.66,
+      "risk_reward": 3.0,
+      "confidence": "68%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-28T06:29:12.105260Z"
     },
     {
       "symbol": "KOTAKBANK.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 386.85,
-      "target": 404.26,
-      "stop_loss": 381.05,
+      "entry_price": 386.55,
+      "target": 403.94,
+      "stop_loss": 380.75,
       "risk_reward": 3.0,
-      "confidence": "73%",
+      "confidence": "68%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.428784Z"
+      "timestamp": "2026-07-28T06:29:12.215517Z"
     },
     {
       "symbol": "LT.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 3811.0,
-      "target": 3982.49,
-      "stop_loss": 3753.84,
+      "entry_price": 3812.1,
+      "target": 3983.64,
+      "stop_loss": 3754.92,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.526160Z"
+      "timestamp": "2026-07-28T06:29:12.419541Z"
     },
     {
       "symbol": "M&M.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 3272.2,
-      "target": 3419.45,
-      "stop_loss": 3223.12,
+      "entry_price": 3273.1,
+      "target": 3420.39,
+      "stop_loss": 3224.0,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.640107Z"
+      "timestamp": "2026-07-28T06:29:12.526481Z"
     },
     {
       "symbol": "MAXHEALTH.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1102.2,
-      "target": 1151.8,
-      "stop_loss": 1085.67,
+      "entry_price": 1102.0,
+      "target": 1151.59,
+      "stop_loss": 1085.47,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.827757Z"
+      "timestamp": "2026-07-28T06:29:13.044117Z"
     },
     {
       "symbol": "NESTLEIND.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1482.9,
-      "target": 1554.32,
-      "stop_loss": 1459.09,
+      "entry_price": 1482.6,
+      "target": 1553.97,
+      "stop_loss": 1458.81,
       "risk_reward": 3.0,
       "confidence": "70%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:22.923897Z"
+      "timestamp": "2026-07-28T06:29:13.231725Z"
     },
     {
       "symbol": "SHRIRAMFIN.NS",
@@ -170,67 +182,79 @@
       "risk_reward": 3.0,
       "confidence": "68%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:23.520983Z"
+      "timestamp": "2026-07-28T06:29:14.095162Z"
+    },
+    {
+      "symbol": "SBIN.NS",
+      "signal": "BUY",
+      "mode": "swing_search",
+      "entry_price": 1016.5,
+      "target": 1062.24,
+      "stop_loss": 1001.25,
+      "risk_reward": 3.0,
+      "confidence": "65%",
+      "pod_approval": "10 Pods + 50 Debate Agents Approved",
+      "timestamp": "2026-07-28T06:29:14.299393Z"
     },
     {
       "symbol": "SUNPHARMA.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1976.5,
-      "target": 2065.44,
-      "stop_loss": 1946.85,
+      "entry_price": 1979.0,
+      "target": 2068.05,
+      "stop_loss": 1949.32,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:23.734762Z"
+      "timestamp": "2026-07-28T06:29:14.436158Z"
     },
     {
       "symbol": "TCS.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 2414.0,
-      "target": 2606.62,
-      "stop_loss": 2349.79,
+      "entry_price": 2412.5,
+      "target": 2604.68,
+      "stop_loss": 2348.44,
       "risk_reward": 3.0,
       "confidence": "70%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:23.830056Z"
+      "timestamp": "2026-07-28T06:29:14.611844Z"
     },
     {
       "symbol": "TATASTEEL.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 184.08,
-      "target": 192.36,
-      "stop_loss": 181.32,
+      "entry_price": 184.18,
+      "target": 192.47,
+      "stop_loss": 181.42,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:24.158180Z"
+      "timestamp": "2026-07-28T06:29:15.064766Z"
     },
     {
       "symbol": "TECHM.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 1631.6,
-      "target": 1726.22,
-      "stop_loss": 1600.06,
+      "entry_price": 1631.4,
+      "target": 1725.97,
+      "stop_loss": 1599.88,
       "risk_reward": 3.0,
       "confidence": "65%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:24.251277Z"
+      "timestamp": "2026-07-28T06:29:15.160897Z"
     },
     {
       "symbol": "WIPRO.NS",
       "signal": "BUY",
       "mode": "swing_search",
-      "entry_price": 181.27,
-      "target": 189.43,
-      "stop_loss": 178.55,
+      "entry_price": 181.25,
+      "target": 189.41,
+      "stop_loss": 178.53,
       "risk_reward": 3.0,
       "confidence": "70%",
       "pod_approval": "10 Pods + 50 Debate Agents Approved",
-      "timestamp": "2026-07-28T06:28:24.657253Z"
+      "timestamp": "2026-07-28T06:29:15.824692Z"
     }
   ]
 }
